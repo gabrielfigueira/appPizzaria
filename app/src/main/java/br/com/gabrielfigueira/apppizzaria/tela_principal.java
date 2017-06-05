@@ -1,5 +1,6 @@
 package br.com.gabrielfigueira.apppizzaria;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import br.com.gabrielfigueira.apppizzaria.controller.ComandaFormController;
+import br.com.gabrielfigueira.apppizzaria.controller.ComandaListaController;
 
 public class tela_principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +44,7 @@ public class tela_principal extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -80,8 +85,9 @@ public class tela_principal extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_comanda) {
+            Intent it = new Intent(this, ComandaListaController.class);
+            startActivity(it);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
