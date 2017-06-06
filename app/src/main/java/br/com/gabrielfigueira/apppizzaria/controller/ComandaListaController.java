@@ -16,7 +16,7 @@ import br.com.gabrielfigueira.apppizzaria.adapter.ComandaAdapter;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaDAO;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
 
-public class ComandaListaController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
+public class ComandaListaController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnClickListener {
     private Button btnCadastrar;
     private ListView lstComanda;
 
@@ -26,9 +26,9 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
         setContentView(R.layout.comanda_lista);
 
         lstComanda = (ListView)findViewById(R.id.lstComanda);
-        btnCadastrar = (Button)findViewById(R.id.btnSalvar);
-        lstComanda.setLongClickable(true);
+        btnCadastrar = (Button)findViewById(R.id.btnCadastrar);
         btnCadastrar.setOnClickListener(this);
+        lstComanda.setLongClickable(true);
         lstComanda.setOnItemClickListener(this);
     }
 
@@ -61,7 +61,7 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
         final Comanda comanda = (Comanda)parent.getItemAtPosition(position);
 
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle("Playlist App");
+        dlg.setTitle("Comanda App");
         dlg.setMessage("Tem certeza que deseja deletar a comanda " + comanda.getMesa() + "?");
         dlg.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
             @Override

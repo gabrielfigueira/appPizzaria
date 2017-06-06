@@ -28,16 +28,18 @@ public class ComandaDAO extends SQLiteOpenHelper {
     private SQLiteDatabase db;
 
     public ComandaDAO(Context context){
-        super(context,"apppizzaria.db",null, 1);
+        super(context,"apppizzaria.db",null, 3);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("create table cliente(id integer primary key AUTOINCREMENT, nome text null);");
         db.execSQL(sql_create);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("DROP TABLE cliente;");
         db.execSQL("DROP TABLE comanda;");
         db.execSQL(sql_create);
     }
@@ -71,7 +73,7 @@ public class ComandaDAO extends SQLiteOpenHelper {
 
     public Comanda pesquisarPorId(int id) throws ParseException {
         try {
-            String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda join cliente on comanda.cliente_id = cliente.id WHERE id=?";
+            String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda join cliente on comanda.cliente_id = cliente.id WHERE comanda.id=?";
             String where[] = new String[]{Integer.toString(id)};
 
             //Definir permissão de leitura
