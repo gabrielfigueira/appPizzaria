@@ -30,6 +30,8 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
         btnCadastrar.setOnClickListener(this);
         lstComanda.setLongClickable(true);
         lstComanda.setOnItemClickListener(this);
+
+        setTitle("Comandas");
     }
 
     @Override

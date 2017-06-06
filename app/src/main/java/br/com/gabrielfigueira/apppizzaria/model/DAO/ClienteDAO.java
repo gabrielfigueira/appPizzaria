@@ -20,6 +20,7 @@ public class ClienteDAO {
         c = new Cliente();
         c.setId(2);
         c.setNome("Gabriel");
+        lista.add(c);
         return lista;
     }
 }

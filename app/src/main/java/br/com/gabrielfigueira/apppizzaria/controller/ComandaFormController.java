@@ -46,6 +46,7 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
         btnCancelar = (Button)findViewById(R.id.btnCancelar);
         btnSalvar.setOnClickListener(this);
         btnCancelar.setOnClickListener(this);
+        setTitle("Comanda");
 
         Intent it = getIntent();
         if (it != null){

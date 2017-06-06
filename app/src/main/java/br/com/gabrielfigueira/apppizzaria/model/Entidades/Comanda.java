@@ -16,6 +16,9 @@ public class Comanda {
     private int id_centralizado;
     private Date data_sincronizacao;
     private Cliente cliente;
+    public Comanda(){
+        cliente = new Cliente();
+    }
 
     public int getId() {
         return id;

@@ -28,7 +28,7 @@ public class ComandaDAO extends SQLiteOpenHelper {
     private SQLiteDatabase db;
 
     public ComandaDAO(Context context){
-        super(context,"apppizzaria.db",null, 3);
+        super(context,"apppizzaria.db",null, 5);
     }
 
     @Override
@@ -39,9 +39,11 @@ public class ComandaDAO extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE cliente;");
         db.execSQL("DROP TABLE comanda;");
         db.execSQL(sql_create);
+
+        db.execSQL("DROP TABLE cliente;");
+        db.execSQL("create table cliente(id integer primary key AUTOINCREMENT, nome text null);");
     }
 
     public int inserir(Comanda comanda){
@@ -73,7 +75,7 @@ public class ComandaDAO extends SQLiteOpenHelper {
 
     public Comanda pesquisarPorId(int id) throws ParseException {
         try {
-            String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda join cliente on comanda.cliente_id = cliente.id WHERE comanda.id=?";
+            String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda left join cliente on comanda.cliente_id = cliente.id WHERE comanda.id=?";
             String where[] = new String[]{Integer.toString(id)};
 
             //Definir permissão de leitura
@@ -93,12 +95,11 @@ public class ComandaDAO extends SQLiteOpenHelper {
         }
     }
     public List<Comanda> pesquisarPorCliente(String cliente_nome) throws ParseException {
-
-        String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda join cliente on comanda.cliente_id = cliente.id WHERE cliente.nome LIKE ?";
-        String where[] = new String[]{"%" + cliente_nome.toUpperCase() + "%"};
-
         //Definir permissão de leitura
         this.db = getReadableDatabase();
+
+        String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda left join cliente on comanda.cliente_id = cliente.id WHERE cliente.nome like ?";
+        String where[] = new String[]{"%" + cliente_nome.toUpperCase() + "%"};
 
         //Realizar a consulta
         Cursor c = this.db.rawQuery(sql, where);
