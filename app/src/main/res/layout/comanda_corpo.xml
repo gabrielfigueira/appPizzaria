@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="br.com.gabrielfigueira.apppizzaria.controller.ComandaCorpoController">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context="br.com.gabrielfigueira.apppizzaria.controller.ComandaCorpoController">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/txtMesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mesa" />
+
+    <EditText
+        android:id="@+id/edtMesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/txtCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cliente" />
+
+    <EditText
+        android:id="@+id/edtCliente_nome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textPersonName" />
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="right">
+        <Button
+            android:id="@+id/btnEditar"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Editar" />
+    </LinearLayout>
+    <Button
+    android:id="@+id/btnCadastrar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Cadastrar" />
+
+    <ListView
+        android:id="@+id/lstProdutoComanda"
+        android:layout_width="match_parent"
+        android:layout_height="446dp"></ListView>
+</LinearLayout>
