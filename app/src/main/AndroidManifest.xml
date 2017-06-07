@@ -19,8 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.ComandaListaController"></activity>
-        <activity android:name=".controller.ComandaFormController"></activity>
+        <activity android:name=".controller.ComandaListaController" />
+        <activity android:name=".controller.ComandaFormController" />
+        <activity android:name=".controller.ComandaCorpoController"></activity>
     </application>
 
 </manifest>

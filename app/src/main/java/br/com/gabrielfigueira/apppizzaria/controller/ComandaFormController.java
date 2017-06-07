@@ -95,13 +95,15 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
                 }
 
             }catch(Exception e){
+                System.out.println(e.getMessage());
                 Log.e("ERRO", e.getMessage());
             }
 
+            System.out.println(id);
 
             AlertDialog.Builder dlg = new AlertDialog.Builder(this);
             dlg.setTitle("Pizzaria App");
-            dlg.setMessage("Operação realizada com sucesso!");
+            dlg.setMessage("Operação realizada com sucesso!"+ id);
             dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

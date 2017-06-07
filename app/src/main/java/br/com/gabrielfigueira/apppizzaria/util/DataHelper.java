@@ -1,6 +1,6 @@
 package br.com.gabrielfigueira.apppizzaria.util;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,18 +10,24 @@ import java.text.SimpleDateFormat;
  */
 
 public class DataHelper {
+    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
     public static Timestamp strToTimestamp(String data_hora) throws ParseException {
         if (data_hora == null || data_hora.isEmpty())
             return null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-        Date parsedDate = (Date) dateFormat.parse(data_hora);
+        Date parsedDate = (Date) df.parse(data_hora);
         return new Timestamp(parsedDate.getTime());
     }
 
     public static Date strToDate(String data) throws ParseException {
         if (data == null || data.isEmpty())
             return null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-        return (Date) dateFormat.parse(data);
+        return (Date) df.parse(data);
+    }
+
+    public static String dateToStr(Date data){
+        if (data == null)
+            return null;
+        return df.format(data);
     }
 }

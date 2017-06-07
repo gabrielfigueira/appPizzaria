@@ -28,7 +28,7 @@ public class ComandaDAO extends SQLiteOpenHelper {
     private SQLiteDatabase db;
 
     public ComandaDAO(Context context){
-        super(context,"apppizzaria.db",null, 5);
+        super(context,"apppizzaria.db",null, 6);
     }
 
     @Override
@@ -98,11 +98,12 @@ public class ComandaDAO extends SQLiteOpenHelper {
         //Definir permissão de leitura
         this.db = getReadableDatabase();
 
-        String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda left join cliente on comanda.cliente_id = cliente.id WHERE cliente.nome like ?";
+//        String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda left join cliente on comanda.cliente_id = cliente.id WHERE cliente.nome like ?";
+        String sql = "SELECT comanda.*, comanda.cliente_id as 'cliente_nome' FROM comanda";
         String where[] = new String[]{"%" + cliente_nome.toUpperCase() + "%"};
 
         //Realizar a consulta
-        Cursor c = this.db.rawQuery(sql, where);
+        Cursor c = this.db.rawQuery(sql, null);
 
         List<Comanda> lista = new ArrayList<>();
         if (c.moveToFirst()){
@@ -119,8 +120,8 @@ public class ComandaDAO extends SQLiteOpenHelper {
         Comanda comanda = new Comanda();
         comanda.setId(cursor.getInt(cursor.getColumnIndex("id")));
         comanda.setMesa(cursor.getString(cursor.getColumnIndex("mesa")));
-        comanda.setData_hora_abertura(DataHelper.strToTimestamp(cursor.getString(cursor.getColumnIndex("data_hora_abertura"))));
-        comanda.setData_hora_finalizacao(DataHelper.strToTimestamp(cursor.getString(cursor.getColumnIndex("data_hora_finalizacao"))));
+        comanda.setData_hora_abertura(DataHelper.strToDate(cursor.getString(cursor.getColumnIndex("data_hora_abertura"))));
+        comanda.setData_hora_finalizacao(DataHelper.strToDate(cursor.getString(cursor.getColumnIndex("data_hora_finalizacao"))));
         comanda.setMesa(cursor.getString(cursor.getColumnIndex("mesa")));
         comanda.setDesconto(cursor.getDouble(cursor.getColumnIndex("desconto")));
         comanda.setId_centralizado(cursor.getInt(cursor.getColumnIndex("id_centralizado")));
@@ -136,11 +137,11 @@ public class ComandaDAO extends SQLiteOpenHelper {
     private ContentValues preparaContent(Comanda comanda){
         ContentValues cv = new ContentValues();
         cv.put("mesa", comanda.getMesa());
-        cv.put("data_hora_abertura", comanda.getData_hora_abertura().toString());
-        cv.put("data_hora_finalizacao", comanda.getData_hora_finalizacao().toString());
+        cv.put("data_hora_abertura", DataHelper.dateToStr(comanda.getData_hora_abertura()));
+        cv.put("data_hora_finalizacao", DataHelper.dateToStr(comanda.getData_hora_finalizacao()));
         cv.put("desconto", comanda.getDesconto());
         cv.put("id_centralizado", comanda.getId_centralizado());
-        cv.put("data_sincronizacao", comanda.getData_sincronizacao().toString());
+        cv.put("data_sincronizacao", DataHelper.dateToStr(comanda.getData_sincronizacao()));
         cv.put("cliente_id", comanda.getCliente() != null? comanda.getCliente().getId(): null);
         return cv;
     }
