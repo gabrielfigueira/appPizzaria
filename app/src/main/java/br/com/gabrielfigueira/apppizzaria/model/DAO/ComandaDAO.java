@@ -5,11 +5,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+
+import org.json.JSONObject;
+
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
 import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
+
+import java.io.BufferedWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.net.HttpURLConnection;
+
 
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
 
@@ -143,6 +155,49 @@ public class ComandaDAO extends SQLiteOpenHelper {
         cv.put("id_centralizado", comanda.getId_centralizado());
         cv.put("data_sincronizacao", DataHelper.dateToStr(comanda.getData_sincronizacao()));
         cv.put("cliente_id", comanda.getCliente() != null? comanda.getCliente().getId(): null);
+
+        try {
+            JSONObject attr = new JSONObject();
+            attr.put("mesa", comanda.getMesa());
+
+            JSONObject comanda_obj = new JSONObject();
+            comanda_obj.put("request", attr);
+
+            new Thread(new Runnable()
+
+            {
+                public void run() {
+                    try {
+                        URL url = new URL("http://localhost:3000/api/comandas/salvar");
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setReadTimeout(10000);
+                        conn.setConnectTimeout(15000);
+                        conn.setRequestMethod("POST");
+
+                        Uri.Builder builder = new Uri.Builder()
+                                .appendQueryParameter("mesa", "1");
+                        String query = builder.build().getEncodedQuery();
+
+                        OutputStream os = conn.getOutputStream();
+                        BufferedWriter writer = new BufferedWriter(
+                                new OutputStreamWriter(os, "UTF-8"));
+                        writer.write(query);
+                        writer.flush();
+                        writer.close();
+                        os.close();
+
+                        conn.connect();
+                    } catch (Exception ex){
+                        System.out.println(ex);
+                    }
+                }
+            }).start();
+
+        } catch (Exception ex){
+            System.out.println(ex);
+        }
+
+
         return cv;
     }
 }
