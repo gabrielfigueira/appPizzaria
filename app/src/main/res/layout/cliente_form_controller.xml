@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context="br.com.gabrielfigueira.apppizzaria.controller.ClienteFormController">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,15 +70,6 @@
         android:text="Telefone"/>
     <EditText
         android:id="@+id/edtTelefone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email"/>
-    <EditText
-        android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

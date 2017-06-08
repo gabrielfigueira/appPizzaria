@@ -47,7 +47,7 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
         edtCep = (EditText)findViewById(R.id.edtCep);
         edtCidade = (EditText)findViewById(R.id.edtCidade);
         edtTelefone = (EditText)findViewById(R.id.edtTelefone);
-        edtEmail = (EditText)findViewById(R.id.edtEmail);
+//        edtEmail = (EditText)findViewById(R.id.edtEmail);
 
         btnSalvar = (Button)findViewById(R.id.btnSalvar);
         btnCancelar = (Button)findViewById(R.id.btnCancelar);
@@ -73,7 +73,7 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
                 edtCep.setText(cliente.getCep());
                 edtCidade.setText(cliente.getCidade());
                 edtTelefone.setText(cliente.getTelefone());
-                edtEmail.setText(cliente.getEmail());
+//                edtEmail.setText(cliente.getEmail());
 
             } catch (Exception e) {
                 Log.e("ERRO", e.getMessage());
@@ -96,7 +96,7 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
                 cliente.setCep(edtCep.getText().toString());
                 cliente.setCidade(edtCidade.getText().toString());
                 cliente.setTelefone(edtTelefone.getText().toString());
-                cliente.setEmail(edtEmail.getText().toString());
+//                cliente.setEmail(edtEmail.getText().toString());
 
                 if ( id == 0){
                     id = new ClienteDAO(this).inserir(cliente);

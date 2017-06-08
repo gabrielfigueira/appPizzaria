@@ -14,8 +14,11 @@ import java.text.ParseException;
 import java.util.List;
 
 import br.com.gabrielfigueira.apppizzaria.R;
+import br.com.gabrielfigueira.apppizzaria.adapter.ClienteAdapter;
 import br.com.gabrielfigueira.apppizzaria.adapter.ComandaAdapter;
+import br.com.gabrielfigueira.apppizzaria.model.DAO.ClienteDAO;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaDAO;
+import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
 
 public class ClienteListaController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnClickListener{
@@ -38,31 +41,31 @@ public class ClienteListaController extends AppCompatActivity implements Adapter
     }
 
     private void preencherListView() throws ParseException {
-        List<Comanda> lista = new ComandaDAO(this).pesquisarPorCliente("");
-        ComandaAdapter adp = new ComandaAdapter(this, lista);
+        List<Cliente> lista = new ClienteDAO(this).pesquisarPorCliente("");
+        ClienteAdapter adp = new ClienteAdapter(this, lista);
         lstCliente.setAdapter(adp);
         adp.notifyDataSetChanged();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final Comanda comanda = (Comanda)parent.getItemAtPosition(position);
-        Intent it = new Intent(getApplicationContext(),ComandaFormController.class);
-        it.putExtra("id", comanda.getId());
+        final Cliente cliente = (Cliente)parent.getItemAtPosition(position);
+        Intent it = new Intent(getApplicationContext(),ClienteFormController.class);
+        it.putExtra("id", cliente.getId());
         startActivity(it);
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        final Comanda comanda = (Comanda)parent.getItemAtPosition(position);
+        final Cliente cliente = (Cliente)parent.getItemAtPosition(position);
 
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle("Comanda App");
-        dlg.setMessage("Tem certeza que deseja deletar a cliente " + comanda.getMesa() + "?");
+        dlg.setTitle("Cliente");
+        dlg.setMessage("Tem certeza que deseja deletar a cliente " + cliente.getNome() + "?");
         dlg.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                new ComandaDAO(getApplicationContext()).deletar(comanda.getId());
+                new ClienteDAO(getApplicationContext()).deletar(cliente.getId());
                 try {
                     preencherListView();
                 } catch (ParseException e) {
