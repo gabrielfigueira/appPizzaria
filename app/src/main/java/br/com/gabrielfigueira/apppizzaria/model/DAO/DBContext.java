@@ -17,7 +17,7 @@ public class DBContext extends SQLiteOpenHelper {
                     "data_sincronizacao text null, " +
                     "data_hora_finalizacao text null, " +
                     "desconto real null, " +
-                    "id_centralizado int null, "+
+                    "id_centralizado integer null, "+
                     "cliente_id integer null"+
                     ");";
     private final String sql_comanda_produto_create =
@@ -43,7 +43,7 @@ public class DBContext extends SQLiteOpenHelper {
                     "email text null, " +
                     "data_cadastro text null, " +
                     "data_sincronizacao text null, " +
-                    "id_centralizado integer null, "+
+                    "id_centralizado integer null"+
                     ");";
 
     /*PEGAR COM OS DEMAIS MEMBROS DO GRUPO*/
@@ -72,17 +72,17 @@ public class DBContext extends SQLiteOpenHelper {
                 db.execSQL(sql_comanda_produto_create);
                 break;
             default:
-                if (versaoOld >= 6)
+                if (versaoOld >= 5)
                     db.execSQL("DROP TABLE comanda;");
 
-                if (versaoOld >= 7)
+                if (versaoOld >= 6)
                     db.execSQL("DROP TABLE comanda_produto;");
 
                 /*PEGAR AS DEMAIS PARTES COM OS DEMAIS MEMBROS DO GRUPO*/
-                if (versaoOld >= 6)
+                if (versaoOld >= 5)
                     db.execSQL("DROP TABLE cliente;");
 
-                if (versaoOld >= 7)
+                if (versaoOld >= 6)
                     db.execSQL("DROP TABLE produto;");
 
                 db.execSQL(sql_cliente_create);
