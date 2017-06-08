@@ -88,11 +88,10 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
             super.onBackPressed();
         }else if (v.getId() == R.id.btnSalvar){
             try {
-
                 cliente.setNome(edtNome.getText().toString());
                 cliente.setCpf(edtCpf.getText().toString());
                 cliente.setLogradouro(edtLogradouro.getText().toString());
-                cliente.setNumero(edtNumero.getText().);
+                cliente.setNumero(Integer.parseInt(edtNumero.getText().toString()));
                 cliente.setBairro(edtBairro.getText().toString());
                 cliente.setCep(edtCep.getText().toString());
                 cliente.setCidade(edtCidade.getText().toString());
