@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.gabrielfigueira.apppizzaria">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +23,8 @@
         </activity>
         <activity android:name=".controller.ComandaListaController" />
         <activity android:name=".controller.ComandaFormController" />
-        <activity android:name=".controller.ComandaCorpoController"></activity>
+        <activity android:name=".controller.ComandaCorpoController" />
+        <activity android:name=".controller.ComandaProdutoFormController"></activity>
     </application>
 
 </manifest>

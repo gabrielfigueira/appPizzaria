@@ -10,17 +10,17 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.gabrielfigueira.apppizzaria.R;
-import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
+import br.com.gabrielfigueira.apppizzaria.model.Entidades.ComandaProduto;
 
 /**
  * Created by Fabricio on 04/06/2017.
  */
 
 public class ComandaProdutoAdapter extends BaseAdapter {
-    private List<Comanda> lista;
+    private List<ComandaProduto> lista;
     private LayoutInflater layout;
 
-    public ComandaProdutoAdapter(Context contexto, List<Comanda> lista){
+    public ComandaProdutoAdapter(Context contexto, List<ComandaProduto> lista){
         this.layout = LayoutInflater.from(contexto);
         this.lista = lista;
     }
@@ -42,18 +42,12 @@ public class ComandaProdutoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Comanda comanda = lista.get(position);
+        ComandaProduto produto = lista.get(position);
         convertView = layout.inflate(R.layout.comanda_lista_item, null);
 
         //Associar os atributos do objeto aos elementos da lista
-        TextView tv1 = (TextView)convertView.findViewById(R.id.txtMesa);
-        tv1.setText(String.format("%s (%s)", comanda.getMesa(), comanda.getData_hora_abertura().toString()));
-
-        TextView tv2 = (TextView)convertView.findViewById(R.id.txtCliente);
-        tv2.setText(comanda.getCliente().getNome());
-//
-//        TextView tv3 = (TextView)convertView.findViewById(R.id.txtUrl);
-//        tv2.setText(playlist.getUrl());
+        TextView tv1 = (TextView)convertView.findViewById(R.id.txtLinha);
+        tv1.setText(String.format("%s - %s (%s)", Integer.toString(produto.getId()).trim() , produto.getProduto().getDescricao().trim(), Double.toString(produto.getQuantidade()).trim()));
         return convertView;
     }
 }

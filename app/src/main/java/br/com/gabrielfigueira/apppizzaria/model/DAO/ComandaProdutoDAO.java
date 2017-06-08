@@ -12,6 +12,8 @@ import java.util.List;
 
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
+import br.com.gabrielfigueira.apppizzaria.model.Entidades.ComandaProduto;
+import br.com.gabrielfigueira.apppizzaria.model.Entidades.Produto;
 import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
 
 public class ComandaProdutoDAO extends DBContext {
@@ -21,21 +23,21 @@ public class ComandaProdutoDAO extends DBContext {
         super(context);
     }
 
-    public int inserir(Comanda comanda){
+    public int inserir(ComandaProduto produto){
         //Definir permissão de escrita
         this.db = getWritableDatabase();
 
-        long id = this.db.insert("comanda_produto", null, preparaContent(comanda));
+        long id = this.db.insert("comanda_produto", null, preparaContent(produto));
 
         return (int)id;
 
     }
 
-    public int atualizar(Comanda comanda){
+    public int atualizar(ComandaProduto produto){
         this.db = getWritableDatabase();
         String where = "id = ?";
-        String whereArgs[] = new String[]{Integer.toString(comanda.getId()) };
-        long id = this.db.update("comanda", preparaContent(comanda), where, whereArgs);
+        String whereArgs[] = new String[]{Integer.toString(produto.getId()) };
+        long id = this.db.update("comanda", preparaContent(produto), where, whereArgs);
         return (int)id;
 
     }
@@ -44,11 +46,11 @@ public class ComandaProdutoDAO extends DBContext {
         this.db = getWritableDatabase();
         String where = "id = ?";
         String whereArgs[] = new String[]{Integer.toString(id) };
-        long ret = db.delete("comanda", where, whereArgs);
+        long ret = db.delete("comanda_produto", where, whereArgs);
         return (int)ret;
     }
 
-    public Comanda pesquisarPorId(int id) throws ParseException {
+    public ComandaProduto pesquisarPorId(int id) throws ParseException {
         try {
             String sql = "SELECT comanda_produto.*, produto.descricao as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE comanda_produto.id=?";
             String where[] = new String[]{Integer.toString(id)};
@@ -61,7 +63,7 @@ public class ComandaProdutoDAO extends DBContext {
 
             if (c.moveToFirst()) {
 
-                return getComandafromCursor(c);
+                return getComandaProdutofromCursor(c);
             } else {
                 return null;
             }
@@ -69,21 +71,21 @@ public class ComandaProdutoDAO extends DBContext {
             throw ex;
         }
     }
-    public List<Comanda> pesquisarPorProduto(String produto_descricao) throws ParseException {
+    public List<ComandaProduto> pesquisarPorProduto(String produto_descricao) throws ParseException {
         //Definir permissão de leitura
         this.db = getReadableDatabase();
 
 //        String sql = "SELECT comanda_produto.*, produto.nome as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE produto.descricao like ?";
-        String sql = "SELECT comanda_produto.*, comanda_produto.produto_id as 'produto_descrica' FROM comanda_produto";
+        String sql = "SELECT comanda_produto.*, comanda_produto.produto_id as 'produto_descricao' FROM comanda_produto";
         String where[] = new String[]{"%" + produto_descricao.toUpperCase() + "%"};
 
         //Realizar a consulta
         Cursor c = this.db.rawQuery(sql, null);
 
-        List<Comanda> lista = new ArrayList<>();
+        List<ComandaProduto> lista = new ArrayList<>();
         if (c.moveToFirst()){
             do {
-                lista.add(getComandafromCursor(c));
+                lista.add(getComandaProdutofromCursor(c));
             }while(c.moveToNext());
             return lista;
         }else{
@@ -91,33 +93,28 @@ public class ComandaProdutoDAO extends DBContext {
         }
     }
 
-    private Comanda getComandafromCursor(Cursor cursor) throws ParseException {
-        Comanda comanda = new Comanda();
-        comanda.setId(cursor.getInt(cursor.getColumnIndex("id")));
-        comanda.setMesa(cursor.getString(cursor.getColumnIndex("mesa")));
-        comanda.setData_hora_abertura(DataHelper.strToDate(cursor.getString(cursor.getColumnIndex("data_hora_abertura"))));
-        comanda.setData_hora_finalizacao(DataHelper.strToDate(cursor.getString(cursor.getColumnIndex("data_hora_finalizacao"))));
-        comanda.setMesa(cursor.getString(cursor.getColumnIndex("mesa")));
-        comanda.setDesconto(cursor.getDouble(cursor.getColumnIndex("desconto")));
-        comanda.setId_centralizado(cursor.getInt(cursor.getColumnIndex("id_centralizado")));
-        comanda.setData_sincronizacao(DataHelper.strToDate(cursor.getString(cursor.getColumnIndex("data_sincronizacao"))));
+    private ComandaProduto getComandaProdutofromCursor(Cursor cursor) throws ParseException {
+        ComandaProduto produto = new ComandaProduto();
+        produto.setId(cursor.getInt(cursor.getColumnIndex("id")));
+        produto.setQuantidade(Double.parseDouble(cursor.getString(cursor.getColumnIndex("quantidade"))));
+        produto.setData_hora_entrega(DataHelper.strToDate(cursor.getString(cursor.getColumnIndex("data_hora_entrega"))));
 
-        Cliente cliente = new Cliente();
-        cliente.setId(cursor.getInt(cursor.getColumnIndex("cliente_id")));
-        cliente.setNome(cursor.getString(cursor.getColumnIndex("cliente_nome")));
-        comanda.setCliente(cliente);
-        return comanda;
+        Produto pro1 = new Produto();
+        pro1.setId(cursor.getInt(cursor.getColumnIndex("produto_id")));
+        pro1.setDescricao(cursor.getString(cursor.getColumnIndex("produto_nome")));
+        produto.setProduto(pro1);
+
+        Comanda com1 = new Comanda();
+        com1.setId(cursor.getInt(cursor.getColumnIndex("comanda_id")));
+        return produto;
     }
 
-    private ContentValues preparaContent(Comanda comanda){
+    private ContentValues preparaContent(ComandaProduto produto){
         ContentValues cv = new ContentValues();
-        cv.put("mesa", comanda.getMesa());
-        cv.put("data_hora_abertura", DataHelper.dateToStr(comanda.getData_hora_abertura()));
-        cv.put("data_hora_finalizacao", DataHelper.dateToStr(comanda.getData_hora_finalizacao()));
-        cv.put("desconto", comanda.getDesconto());
-        cv.put("id_centralizado", comanda.getId_centralizado());
-        cv.put("data_sincronizacao", DataHelper.dateToStr(comanda.getData_sincronizacao()));
-        cv.put("cliente_id", comanda.getCliente() != null? comanda.getCliente().getId(): null);
+        cv.put("quantidade", produto.getQuantidade());
+        cv.put("data_hora_entrega", DataHelper.dateToStr(produto.getData_hora_entrega()));
+        cv.put("comanda_id", produto.getComanda() != null? produto.getComanda().getId(): null);
+        cv.put("produto_id", produto.getProduto() != null? produto.getProduto().getId(): null);
         return cv;
     }
 }

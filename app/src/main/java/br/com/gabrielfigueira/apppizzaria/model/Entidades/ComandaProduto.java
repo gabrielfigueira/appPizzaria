@@ -13,4 +13,44 @@ public class ComandaProduto {
 
     private Comanda comanda;
     private Produto produto;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(double quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public Date getData_hora_entrega() {
+        return data_hora_entrega;
+    }
+
+    public void setData_hora_entrega(Date data_hora_entrega) {
+        this.data_hora_entrega = data_hora_entrega;
+    }
+
+    public Comanda getComanda() {
+        return comanda;
+    }
+
+    public void setComanda(Comanda comanda) {
+        this.comanda = comanda;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
 }
