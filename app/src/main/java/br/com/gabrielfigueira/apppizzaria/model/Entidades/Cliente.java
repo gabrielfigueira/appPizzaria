@@ -1,12 +1,26 @@
 package br.com.gabrielfigueira.apppizzaria.model.Entidades;
 
+import java.util.Date;
+
 /**
- * Created by Fabricio on 04/06/2017.
+ * Created by Gabriel on 04/06/2017.
  */
 
 public class Cliente {
+
     private int id;
+    private int id_centralizado;
     private String nome;
+    private String cpf;
+    private String logradouro;
+    private int numero;
+    private String bairro;
+    private String cep;
+    private String cidade;
+    private String telefone;
+    private String email;
+    private Date data_cadastro;
+    private Date data_sincronizacao;
 
     public int getId() {
         return id;
@@ -24,8 +38,98 @@ public class Cliente {
         this.nome = nome;
     }
 
+
+
     @Override
     public String toString() {
         return Integer.toString(id).trim() + " - " + nome.trim();
+    }
+
+    public int getId_centralizado() {
+        return id_centralizado;
+    }
+
+    public void setId_centralizado(int id_centralizado) {
+        this.id_centralizado = id_centralizado;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getData_cadastro() {
+        return data_cadastro;
+    }
+
+    public void setData_cadastro(Date data_cadastro) {
+        this.data_cadastro = data_cadastro;
+    }
+
+    public Date getData_sincronizacao() {
+        return data_sincronizacao;
+    }
+
+    public void setData_sincronizacao(Date data_sincronizacao) {
+        this.data_sincronizacao = data_sincronizacao;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 }

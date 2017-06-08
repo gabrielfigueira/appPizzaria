@@ -197,7 +197,6 @@ public class ComandaDAO extends SQLiteOpenHelper {
             System.out.println(ex);
         }
 
-
         return cv;
     }
 }

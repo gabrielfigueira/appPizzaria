@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import br.com.gabrielfigueira.apppizzaria.controller.ClienteListaController;
 import br.com.gabrielfigueira.apppizzaria.controller.ComandaFormController;
 import br.com.gabrielfigueira.apppizzaria.controller.ComandaListaController;
 
@@ -89,7 +90,8 @@ public class tela_principal extends AppCompatActivity
             Intent it = new Intent(this, ComandaListaController.class);
             startActivity(it);
         } else if (id == R.id.nav_gallery) {
-
+            Intent it = new Intent(this, ClienteListaController.class);
+            startActivity(it);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

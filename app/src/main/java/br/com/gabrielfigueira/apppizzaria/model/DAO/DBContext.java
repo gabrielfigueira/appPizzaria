@@ -29,8 +29,24 @@ public class DBContext extends SQLiteOpenHelper {
                     "produto_id int null"+
                     ");";
 
+    private final String sql_cliente_create =
+            "create table cliente("+
+                    "id integer primary key AUTOINCREMENT,"+
+                    "nome text null, " +
+                    "cpf text null, " +
+                    "logradouro text null, " +
+                    "numero int null, " +
+                    "bairro text null, " +
+                    "cep int null, " +
+                    "cidade text null, " +
+                    "telefone int null, " +
+                    "email text null, " +
+                    "data_cadastro text null, " +
+                    "data_sincronizacao text null, " +
+                    "id_centralizado int null, "+
+                    ");";
+
     /*PEGAR COM OS DEMAIS MEMBROS DO GRUPO*/
-    private final String sql_cliente_create = "create table cliente(id integer primary key AUTOINCREMENT, nome text null);";
     private final String sql_produto_create = "create table produto(id integer primary key AUTOINCREMENT, descricao text null);";
 
     private SQLiteDatabase db;
