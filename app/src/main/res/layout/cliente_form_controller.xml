@@ -56,22 +56,6 @@
         android:id="@+id/edtCep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cidade"/>
-    <EditText
-        android:id="@+id/edtCidade"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Telefone"/>
-    <EditText
-        android:id="@+id/edtTelefone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_marginTop="10dp"

@@ -45,8 +45,8 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
         edtNumero = (EditText)findViewById(R.id.edtNumero);
         edtBairro = (EditText)findViewById(R.id.edtBairro);
         edtCep = (EditText)findViewById(R.id.edtCep);
-        edtCidade = (EditText)findViewById(R.id.edtCidade);
-        edtTelefone = (EditText)findViewById(R.id.edtTelefone);
+//        edtCidade = (EditText)findViewById(R.id.edtCidade);
+//        edtTelefone = (EditText)findViewById(R.id.edtTelefone);
 //        edtEmail = (EditText)findViewById(R.id.edtEmail);
 
         btnSalvar = (Button)findViewById(R.id.btnSalvar);
@@ -71,8 +71,8 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
                 edtNumero.setText(cliente.getNumero());
                 edtBairro.setText(cliente.getBairro());
                 edtCep.setText(cliente.getCep());
-                edtCidade.setText(cliente.getCidade());
-                edtTelefone.setText(cliente.getTelefone());
+//                edtCidade.setText(cliente.getCidade());
+//                edtTelefone.setText(cliente.getTelefone());
 //                edtEmail.setText(cliente.getEmail());
 
             } catch (Exception e) {
@@ -94,8 +94,8 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
                 cliente.setNumero(Integer.parseInt(edtNumero.getText().toString()));
                 cliente.setBairro(edtBairro.getText().toString());
                 cliente.setCep(edtCep.getText().toString());
-                cliente.setCidade(edtCidade.getText().toString());
-                cliente.setTelefone(edtTelefone.getText().toString());
+//                cliente.setCidade(edtCidade.getText().toString());
+//                cliente.setTelefone(edtTelefone.getText().toString());
 //                cliente.setEmail(edtEmail.getText().toString());
 
                 if ( id == 0){

@@ -18,15 +18,15 @@ public class DBContext extends SQLiteOpenHelper {
                     "data_hora_finalizacao text null, " +
                     "desconto real null, " +
                     "id_centralizado int null, "+
-                    "cliente_id int null"+
+                    "cliente_id integer null"+
                     ");";
     private final String sql_comanda_produto_create =
             "create table comanda_produto("+
                     "id integer primary key AUTOINCREMENT,"+
                     "quantidade real null, " +
                     "data_hora_entrega text null, " +
-                    "comanda_id int null,"+
-                    "produto_id int null"+
+                    "comanda_id integer null,"+
+                    "produto_id integer null"+
                     ");";
 
     private final String sql_cliente_create =
@@ -35,15 +35,15 @@ public class DBContext extends SQLiteOpenHelper {
                     "nome text null, " +
                     "cpf text null, " +
                     "logradouro text null, " +
-                    "numero int null, " +
+                    "numero integer null, " +
                     "bairro text null, " +
-                    "cep int null, " +
+                    "cep text null, " +
                     "cidade text null, " +
-                    "telefone int null, " +
+                    "telefone text null, " +
                     "email text null, " +
                     "data_cadastro text null, " +
                     "data_sincronizacao text null, " +
-                    "id_centralizado int null, "+
+                    "id_centralizado integer null, "+
                     ");";
 
     /*PEGAR COM OS DEMAIS MEMBROS DO GRUPO*/
