@@ -25,37 +25,12 @@ import java.net.HttpURLConnection;
 
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
 
-public class ComandaDAO extends SQLiteOpenHelper {
-    private final String sql_create =
-            "create table comanda("+
-                    "id integer primary key AUTOINCREMENT,"+
-                    "mesa text null, " +
-                    "data_hora_abertura text null, " +
-                    "data_sincronizacao text null, " +
-                    "data_hora_finalizacao text null, " +
-                    "desconto real null, " +
-                    "id_centralizado int null, "+
-                    "cliente_id int null"+
-                    ");";
+public class ComandaDAO extends DBContext {
+
     private SQLiteDatabase db;
 
-    public ComandaDAO(Context context){
-        super(context,"apppizzaria.db",null, 6);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table cliente(id integer primary key AUTOINCREMENT, nome text null);");
-        db.execSQL(sql_create);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE comanda;");
-        db.execSQL(sql_create);
-
-        db.execSQL("DROP TABLE cliente;");
-        db.execSQL("create table cliente(id integer primary key AUTOINCREMENT, nome text null);");
+    public ComandaDAO(Context context) {
+        super(context);
     }
 
     public int inserir(Comanda comanda){
