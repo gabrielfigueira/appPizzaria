@@ -37,7 +37,7 @@ public class ComandaProdutoDAO extends DBContext {
         this.db = getWritableDatabase();
         String where = "id = ?";
         String whereArgs[] = new String[]{Integer.toString(produto.getId()) };
-        long id = this.db.update("comanda", preparaContent(produto), where, whereArgs);
+        long id = this.db.update("comanda_produto", preparaContent(produto), where, whereArgs);
         return (int)id;
 
     }

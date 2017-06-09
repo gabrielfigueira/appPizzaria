@@ -1,7 +1,9 @@
 package br.com.gabrielfigueira.apppizzaria.controller;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +25,7 @@ import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaProdutoDAO;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.ComandaProduto;
 
-public class ComandaCorpoController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnClickListener {
+public class ComandaCorpoController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnClickListener {
     private EditText edtMesa;
     private EditText edtCliente_nome;
     private Button btnEditar;
@@ -51,6 +53,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
 
         lstComandaProduto = (ListView)findViewById(R.id.lstProdutoComanda);
         lstComandaProduto.setOnItemClickListener(this);
+        lstComandaProduto.setOnItemLongClickListener(this);
 
 
         setTitle("Comanda");
@@ -111,5 +114,29 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
             it.putExtra("id", 0);
             startActivity(it);
         }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        final ComandaProduto produto = (ComandaProduto)parent.getItemAtPosition(position);
+
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle("Produto");
+        dlg.setMessage("Tem certeza que deseja deletar o produto da comanda " + (produto.getProduto() != null? produto.getProduto().getDescricao(): "") + "?");
+        dlg.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new ComandaProdutoDAO(getApplicationContext()).deletar(produto.getId());
+                try {
+                    atualizaTela();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        dlg.setNegativeButton("NÃO", null);
+        dlg.show();
+
+        return true;
     }
 }
