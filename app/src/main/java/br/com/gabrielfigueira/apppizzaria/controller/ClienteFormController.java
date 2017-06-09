@@ -91,7 +91,7 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
                 cliente.setNome(edtNome.getText().toString());
                 cliente.setCpf(edtCpf.getText().toString());
                 cliente.setLogradouro(edtLogradouro.getText().toString());
-                cliente.setNumero(Integer.parseInt(edtNumero.getText().toString()));
+                edtNumero.setText(Integer.toString(cliente.getNumero()));
                 cliente.setBairro(edtBairro.getText().toString());
                 cliente.setCep(edtCep.getText().toString());
 //                cliente.setCidade(edtCidade.getText().toString());

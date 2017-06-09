@@ -112,7 +112,7 @@ public class ClienteDAO extends DBContext{
     private Cliente getClientefromCursor(Cursor cursor) throws ParseException {
         Cliente cliente = new Cliente();
         cliente.setId(cursor.getInt(cursor.getColumnIndex("id")));
-        cliente.setNome(cursor.getString(cursor.getColumnIndex("mesa")));
+        cliente.setNome(cursor.getString(cursor.getColumnIndex("nome")));
         cliente.setCpf(cursor.getString(cursor.getColumnIndex("cpf")));
         cliente.setLogradouro(cursor.getString(cursor.getColumnIndex("logradouro")));
         cliente.setNumero(cursor.getInt(cursor.getColumnIndex("numero")));

@@ -43,10 +43,10 @@ public class ClienteAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Cliente cliente = lista.get(position);
-        convertView = layout.inflate(R.layout.comanda_lista_item, null);
+        convertView = layout.inflate(R.layout.cliente_lista_item, null);
 
         //Associar os atributos do objeto aos elementos da lista
-        TextView tv1 = (TextView)convertView.findViewById(R.id.txtMesa);
+        TextView tv1 = (TextView)convertView.findViewById(R.id.txtNome);
         tv1.setText(String.format("%s", cliente.getNome()));
 
 

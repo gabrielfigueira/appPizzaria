@@ -30,7 +30,7 @@ public class ClienteListaController extends AppCompatActivity implements Adapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cliente_lista);
 
-        lstCliente = (ListView)findViewById(R.id.lstComanda);
+        lstCliente = (ListView)findViewById(R.id.lstCliente);
         btnCadastrar = (Button)findViewById(R.id.btnCadastrar);
         btnCadastrar.setOnClickListener(this);
         lstCliente.setLongClickable(true);
@@ -38,6 +38,15 @@ public class ClienteListaController extends AppCompatActivity implements Adapter
         lstCliente.setOnItemClickListener(this);
 
         setTitle("Clientes");
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        try {
+            preencherListView();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void preencherListView() throws ParseException {

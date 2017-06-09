@@ -51,7 +51,7 @@ public class DBContext extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
     public DBContext(Context context){
-        super(context,"apppizzaria.db",null, 6);
+        super(context,"apppizzaria.db",null, 7);
     }
 
     @Override
@@ -73,17 +73,17 @@ public class DBContext extends SQLiteOpenHelper {
                 break;
             default:
                 if (versaoOld >= 5)
-                    db.execSQL("DROP TABLE comanda;");
+                    db.execSQL("DROP TABLE IF EXISTS comanda;");
 
                 if (versaoOld >= 6)
-                    db.execSQL("DROP TABLE comanda_produto;");
+                    db.execSQL("DROP TABLE IF EXISTS comanda_produto;");
 
                 /*PEGAR AS DEMAIS PARTES COM OS DEMAIS MEMBROS DO GRUPO*/
                 if (versaoOld >= 5)
-                    db.execSQL("DROP TABLE cliente;");
+                    db.execSQL("DROP TABLE IF EXISTS cliente;");
 
                 if (versaoOld >= 6)
-                    db.execSQL("DROP TABLE produto;");
+                    db.execSQL("DROP TABLE IF EXISTS produto;");
 
                 db.execSQL(sql_cliente_create);
                 db.execSQL(sql_produto_create);
