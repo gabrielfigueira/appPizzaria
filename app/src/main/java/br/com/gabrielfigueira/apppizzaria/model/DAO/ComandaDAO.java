@@ -85,12 +85,12 @@ public class ComandaDAO extends DBContext {
         //Definir permissão de leitura
         this.db = getReadableDatabase();
 
-//        String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda left join cliente on comanda.cliente_id = cliente.id WHERE cliente.nome like ?";
-        String sql = "SELECT comanda.*, comanda.cliente_id as 'cliente_nome' FROM comanda";
+        String sql = "SELECT comanda.*, cliente.nome as 'cliente_nome' FROM comanda left join cliente on comanda.cliente_id = cliente.id WHERE cliente.nome like ?";
+        //String sql = "SELECT comanda.*, comanda.cliente_id as 'cliente_nome' FROM comanda";
         String where[] = new String[]{"%" + cliente_nome.toUpperCase() + "%"};
 
         //Realizar a consulta
-        Cursor c = this.db.rawQuery(sql, null);
+        Cursor c = this.db.rawQuery(sql, where);
 
         List<Comanda> lista = new ArrayList<>();
         if (c.moveToFirst()){

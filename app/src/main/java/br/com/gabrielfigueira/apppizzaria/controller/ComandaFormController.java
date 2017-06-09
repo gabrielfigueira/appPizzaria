@@ -80,7 +80,10 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
+        Intent it= getIntent();
         if (v.getId() == R.id.btnCancelar){
+            if ( it != null)
+                setResult(RESULT_CANCELED, it);
             super.onBackPressed();
         }else if (v.getId() == R.id.btnSalvar){
             try {
@@ -90,10 +93,14 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
 
                 if ( id == 0){
                     id = new ComandaDAO(this).inserir(comanda);
+                    comanda.setId(id);
                 }else{
                     id = new ComandaDAO(this).atualizar(comanda);
                 }
-
+                if (it != null){
+                    it.putExtra("id", comanda.getId());
+                    setResult(RESULT_OK, it);
+                }
             }catch(Exception e){
                 System.out.println(e.getMessage());
                 Log.e("ERRO", e.getMessage());

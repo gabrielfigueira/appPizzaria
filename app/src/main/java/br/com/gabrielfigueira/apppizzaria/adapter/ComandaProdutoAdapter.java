@@ -43,7 +43,7 @@ public class ComandaProdutoAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ComandaProduto produto = lista.get(position);
-        convertView = layout.inflate(R.layout.comanda_lista_item, null);
+        convertView = layout.inflate(R.layout.comanda_produto_lista_item, null);
 
         //Associar os atributos do objeto aos elementos da lista
         TextView tv1 = (TextView)convertView.findViewById(R.id.txtLinha);

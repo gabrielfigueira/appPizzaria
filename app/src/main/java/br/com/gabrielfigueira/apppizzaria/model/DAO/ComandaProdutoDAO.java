@@ -50,6 +50,14 @@ public class ComandaProdutoDAO extends DBContext {
         return (int)ret;
     }
 
+    public int deletar_por_comanda(int comanda_id){
+        this.db = getWritableDatabase();
+        String where = "comanda_id = ?";
+        String whereArgs[] = new String[]{Integer.toString(comanda_id) };
+        long ret = db.delete("comanda_produto", where, whereArgs);
+        return (int)ret;
+    }
+
     public ComandaProduto pesquisarPorId(int id) throws ParseException {
         try {
             String sql = "SELECT comanda_produto.*, produto.descricao as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE comanda_produto.id=?";
@@ -101,11 +109,12 @@ public class ComandaProdutoDAO extends DBContext {
 
         Produto pro1 = new Produto();
         pro1.setId(cursor.getInt(cursor.getColumnIndex("produto_id")));
-        pro1.setDescricao(cursor.getString(cursor.getColumnIndex("produto_nome")));
+        pro1.setDescricao(cursor.getString(cursor.getColumnIndex("produto_descricao")));
         produto.setProduto(pro1);
 
         Comanda com1 = new Comanda();
         com1.setId(cursor.getInt(cursor.getColumnIndex("comanda_id")));
+        produto.setComanda(com1);
         return produto;
     }
 

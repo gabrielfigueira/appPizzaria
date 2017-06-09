@@ -14,6 +14,10 @@ public class ComandaProduto {
     private Comanda comanda;
     private Produto produto;
 
+    public ComandaProduto(){
+        produto = new Produto();
+    }
+
     public int getId() {
         return id;
     }

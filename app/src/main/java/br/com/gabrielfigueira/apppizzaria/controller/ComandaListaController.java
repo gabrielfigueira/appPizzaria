@@ -14,7 +14,9 @@ import java.util.List;
 import br.com.gabrielfigueira.apppizzaria.R;
 import br.com.gabrielfigueira.apppizzaria.adapter.ComandaAdapter;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaDAO;
+import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaProdutoDAO;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
+import br.com.gabrielfigueira.apppizzaria.util.ModoDominio;
 
 public class ComandaListaController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnClickListener {
     private Button btnCadastrar;
@@ -54,7 +56,7 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Comanda comanda = (Comanda)parent.getItemAtPosition(position);
-        Intent it = new Intent(getApplicationContext(),ComandaFormController.class);
+        Intent it = new Intent(getApplicationContext(),ComandaCorpoController.class);
         it.putExtra("id", comanda.getId());
         startActivity(it);
     }
@@ -69,6 +71,7 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
         dlg.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                new ComandaProdutoDAO(getApplicationContext()).deletar_por_comanda(comanda.getId());
                 new ComandaDAO(getApplicationContext()).deletar(comanda.getId());
                 try {
                     preencherListView();
@@ -92,10 +95,29 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
                         ComandaFormController.class
                 );
                 //Abrir a Atividade
-                startActivity(it);
+                startActivityForResult(it, ModoDominio.inserir.getValor());
             } catch (Exception ex){
 
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ModoDominio.inserir.getValor()||requestCode == ModoDominio.alterar.getValor()){
+            if (resultCode == RESULT_OK) {
+                int id = data.getIntExtra("id", 0);
+                if (id != 0){
+                    Intent it = new Intent(getApplicationContext(),ComandaCorpoController.class);
+                    it.putExtra("id", id);
+                    startActivity(it);
+                }
+
+            }
+        }
+    }
+
+
 }

@@ -23,8 +23,8 @@ public class ProdutoDAO {
         pro.setDescricao("Macarronada");
         lista.add(pro);
         pro = new Produto();
-        pro.setId(1);
-        pro.setDescricao("Macarronada");
+        pro.setId(2);
+        pro.setDescricao("Sushi");
         lista.add(pro);
         return lista;
     }

@@ -1,6 +1,7 @@
 package br.com.gabrielfigueira.apppizzaria.controller;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +27,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
     private EditText edtMesa;
     private EditText edtCliente_nome;
     private Button btnEditar;
-    private Button btnCadastrar;
+    private FloatingActionButton btnCadastrar;
 
     private ListView lstComandaProduto;
 
@@ -38,18 +39,25 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         setContentView(R.layout.comanda_corpo);
 
         edtMesa = (EditText)findViewById(R.id.edtMesa);
+        edtMesa.setFocusable(false);
         edtCliente_nome = (EditText)findViewById(R.id.edtCliente_nome);
+        edtCliente_nome.setFocusable(false);
+
         btnEditar = (Button)findViewById(R.id.btnEditar);
-        btnCadastrar = (Button)findViewById(R.id.btnCadastrar);
+        btnEditar.setOnClickListener(this);
+
+        btnCadastrar = (FloatingActionButton) findViewById(R.id.btnCadastrar);
+        btnCadastrar.setOnClickListener(this);
+
         lstComandaProduto = (ListView)findViewById(R.id.lstProdutoComanda);
-        lstComandaProduto.setOnClickListener(this);
         lstComandaProduto.setOnItemClickListener(this);
+
+
         setTitle("Comanda");
         Intent it = getIntent();
         if (it != null){
             try{
-                atualizaTela();
-
+                id = it.getIntExtra("id", 0);
             }catch(Exception e){
                 Log.e("ERRO", e.getMessage());
             }
@@ -87,9 +95,9 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         final ComandaProduto produto = (ComandaProduto)adapterView.getItemAtPosition(position);
-//        Intent it = new Intent(getApplicationContext(),ComandaFormController.class);
-//        it.putExtra("id", produto.getId());
-//        startActivity(it);
+        Intent it = new Intent(getApplicationContext(),ComandaProdutoFormController.class);
+        it.putExtra("id", produto.getId());
+        startActivity(it);
     }
 
     @Override
@@ -97,6 +105,10 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         if (view.getId() == R.id.btnEditar){
             Intent it = new Intent(getApplicationContext(),ComandaFormController.class);
             it.putExtra("id", comanda.getId());
+            startActivity(it);
+        }else if(view.getId() == R.id.btnCadastrar) {
+            Intent it = new Intent(getApplicationContext(),ComandaProdutoFormController.class);
+            it.putExtra("id", 0);
             startActivity(it);
         }
     }
