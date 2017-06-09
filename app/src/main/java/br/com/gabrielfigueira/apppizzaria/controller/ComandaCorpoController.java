@@ -79,7 +79,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
     }
 
     private void preencherListView() throws ParseException {
-        List<ComandaProduto> lista = new ComandaProdutoDAO(this).pesquisarPorProduto("");
+        List<ComandaProduto> lista = new ComandaProdutoDAO(this).pesquisarPorProduto(comanda.getId(), "");
         ComandaProdutoAdapter adp = new ComandaProdutoAdapter(this, lista);
         lstComandaProduto.setAdapter(adp);
         adp.notifyDataSetChanged();
@@ -100,6 +100,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         final ComandaProduto produto = (ComandaProduto)adapterView.getItemAtPosition(position);
         Intent it = new Intent(getApplicationContext(),ComandaProdutoFormController.class);
         it.putExtra("id", produto.getId());
+        it.putExtra("comanda_id", comanda.getId());
         startActivity(it);
     }
 
@@ -112,6 +113,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         }else if(view.getId() == R.id.btnCadastrar) {
             Intent it = new Intent(getApplicationContext(),ComandaProdutoFormController.class);
             it.putExtra("id", 0);
+            it.putExtra("comanda_id", comanda.getId());
             startActivity(it);
         }
     }

@@ -79,16 +79,16 @@ public class ComandaProdutoDAO extends DBContext {
             throw ex;
         }
     }
-    public List<ComandaProduto> pesquisarPorProduto(String produto_descricao) throws ParseException {
+    public List<ComandaProduto> pesquisarPorProduto(int comanda_id, String produto_descricao) throws ParseException {
         //Definir permissão de leitura
         this.db = getReadableDatabase();
 
 //        String sql = "SELECT comanda_produto.*, produto.nome as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE produto.descricao like ?";
-        String sql = "SELECT comanda_produto.*, comanda_produto.produto_id as 'produto_descricao' FROM comanda_produto";
-        String where[] = new String[]{"%" + produto_descricao.toUpperCase() + "%"};
+        String sql = "SELECT comanda_produto.*, comanda_produto.produto_id as 'produto_descricao' FROM comanda_produto where comanda_id = ?";
+        String where[] = new String[]{/*"%" + produto_descricao.toUpperCase() + "%"*/ Integer.toString(comanda_id).trim() };
 
         //Realizar a consulta
-        Cursor c = this.db.rawQuery(sql, null);
+        Cursor c = this.db.rawQuery(sql, where);
 
         List<ComandaProduto> lista = new ArrayList<>();
         if (c.moveToFirst()){

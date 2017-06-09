@@ -20,6 +20,7 @@ import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaDAO;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ProdutoDAO;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaProdutoDAO;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
+import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Produto;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.ComandaProduto;
 import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
@@ -31,6 +32,7 @@ public class ComandaProdutoFormController extends AppCompatActivity implements V
     private Button btnCancelar;
 
     private int id;
+    private int comanda_id;
     private ComandaProduto produto;
 
     @Override
@@ -52,6 +54,7 @@ public class ComandaProdutoFormController extends AppCompatActivity implements V
         if (it != null){
             try{
                 id = it.getIntExtra("id",0);
+                comanda_id= it.getIntExtra("comanda_id",0);
                 produto = new ComandaProdutoDAO(this).pesquisarPorId(id);
                 if (produto == null){
                     produto = new ComandaProduto();
@@ -87,6 +90,10 @@ public class ComandaProdutoFormController extends AppCompatActivity implements V
             try {
                 produto.setQuantidade(Double.parseDouble(edtQuantidade.getText().toString()));
                 produto.setProduto((Produto) spnProduto.getSelectedItem());
+
+                Comanda com1 = new Comanda();
+                com1.setId(comanda_id);
+                produto.setComanda(com1);
 
                 if ( id == 0){
                     produto.setData_hora_entrega(null);
