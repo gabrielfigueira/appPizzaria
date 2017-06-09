@@ -6,23 +6,28 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
 import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
+import br.com.gabrielfigueira.apppizzaria.util.WebService;
 
 /**
  * Created by Fabricio on 04/06/2017.
  */
 
 public class ClienteDAO extends DBContext{
-
+    private Context context;
     private SQLiteDatabase db;
+    private String response;
 
     public ClienteDAO(Context context){
         super(context);
+        this.context = context;
     }
 
     public int inserir(Cliente cliente){
@@ -30,8 +35,21 @@ public class ClienteDAO extends DBContext{
         this.db = getWritableDatabase();
 
         long id = this.db.insert("cliente", null, preparaContent(cliente));
+        try {
+            JSONObject obj = new JSONObject();
 
+            obj.put("nome",cliente.getNome());
+
+
+            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/clientes/salvar", obj.toString()).get();
+            System.out.println(response);
+        } catch (Exception ex){
+
+        }
         return (int)id;
+
+
+
 
     }
 
