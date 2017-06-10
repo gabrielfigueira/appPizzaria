@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
@@ -39,7 +40,25 @@ public class ComandaProdutoDAO extends DBContext {
         String whereArgs[] = new String[]{Integer.toString(produto.getId()) };
         long id = this.db.update("comanda_produto", preparaContent(produto), where, whereArgs);
         return (int)id;
+    }
 
+    public int entregarProduto(int comanda_id, int produto_id) throws ParseException {
+        this.db = getWritableDatabase();
+        String sql = "SELECT * FROM comanda_produto WHERE comanda_id=? and produto_id=? and data_hora_entrega = null";
+        String where[] = new String[]{Integer.toString(comanda_id),Integer.toString(produto_id) };
+        Cursor c = this.db.rawQuery(sql, where);
+
+        ComandaProduto com = null;
+        if (c.moveToFirst())
+            com = getComandaProdutofromCursor(c);
+
+        if (com != null){
+            com.setData_hora_entrega(new Date());
+            atualizar(com);
+            return  1;
+        }
+
+        return 0;
     }
 
     public int deletar(int id){
