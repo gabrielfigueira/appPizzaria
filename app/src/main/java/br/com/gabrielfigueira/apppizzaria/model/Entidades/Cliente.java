@@ -1,5 +1,9 @@
 package br.com.gabrielfigueira.apppizzaria.model.Entidades;
 
+import android.util.Log;
+
+import org.json.JSONObject;
+
 import java.util.Date;
 
 /**
@@ -131,5 +135,22 @@ public class Cliente {
 
     public void setNumero(int numero) {
         this.numero = numero;
+    }
+
+    public JSONObject toJson(){
+        JSONObject obj = new JSONObject();
+        try{
+            obj.put("nome", nome);
+            obj.put("cpf", cpf);
+            obj.put("bairro", bairro);
+            obj.put("cep", cep);
+            obj.put("cidade", cidade);
+            obj.put("telefone", telefone);
+            obj.put("email", email);
+            obj.put("data_sincronizacao", data_sincronizacao);
+        } catch (Exception ex){
+            Log.e("LOG:", ex.getMessage());
+        }
+        return obj;
     }
 }

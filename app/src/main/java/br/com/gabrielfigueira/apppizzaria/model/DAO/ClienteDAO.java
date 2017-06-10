@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -36,21 +37,13 @@ public class ClienteDAO extends DBContext{
 
         long id = this.db.insert("cliente", null, preparaContent(cliente));
         try {
-            JSONObject obj = new JSONObject();
-
-            obj.put("nome",cliente.getNome());
-
-
-            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/clientes/salvar", obj.toString()).get();
-            System.out.println(response);
+            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/clientes/salvar", cliente.toJson().toString()).get();
+            JSONObject resposta = new JSONObject(response);
+            System.out.println(resposta.getString("id"));
         } catch (Exception ex){
-
+            Log.e("ERRO", ex.getMessage());
         }
         return (int)id;
-
-
-
-
     }
 
     public int atualizar(Cliente cliente){
@@ -58,6 +51,14 @@ public class ClienteDAO extends DBContext{
         String where = "id = ?";
         String whereArgs[] = new String[]{Integer.toString(cliente.getId()) };
         long id = this.db.update("cliente", preparaContent(cliente), where, whereArgs);
+
+        try{
+            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/clientes/salvar", cliente.toJson().toString()).get();
+            JSONObject resposta = new JSONObject(response);
+            System.out.println(resposta.getString("id"));
+        }catch (Exception ex){
+            Log.e("ERRO", ex.getMessage());
+        }
         return (int)id;
 
     }
