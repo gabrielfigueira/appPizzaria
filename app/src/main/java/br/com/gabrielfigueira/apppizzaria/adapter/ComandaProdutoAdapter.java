@@ -16,7 +16,7 @@ import br.com.gabrielfigueira.apppizzaria.model.Entidades.ComandaProduto;
  * Created by Fabricio on 04/06/2017.
  */
 
-public class ComandaProdutoAdapter extends BaseAdapter {
+public class ComandaProdutoAdapter extends BaseAdapter{
     private List<ComandaProduto> lista;
     private LayoutInflater layout;
 
