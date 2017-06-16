@@ -1,5 +1,9 @@
 package br.com.gabrielfigueira.apppizzaria.model.Entidades;
 
+import android.util.Log;
+
+import org.json.JSONObject;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -82,5 +86,15 @@ public class Comanda {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public JSONObject toJson(){
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("mesa", mesa);
+        } catch(Exception ex) {
+            Log.e("ERRO:", ex.getMessage());
+        }
+        return obj;
     }
 }

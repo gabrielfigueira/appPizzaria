@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -24,13 +25,16 @@ import java.net.HttpURLConnection;
 
 
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
+import br.com.gabrielfigueira.apppizzaria.util.WebService;
 
 public class ComandaDAO extends DBContext {
-
+    private Context context;
     private SQLiteDatabase db;
+    private String response;
 
     public ComandaDAO(Context context) {
         super(context);
+        this.context = context;
     }
 
     public int inserir(Comanda comanda){
@@ -39,6 +43,13 @@ public class ComandaDAO extends DBContext {
 
         long id = this.db.insert("comanda", null, preparaContent(comanda));
 
+        try{
+            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/comandas/salvar", comanda.toJson().toString()).get();
+            JSONObject resposta = new JSONObject(response);
+            System.out.println(resposta.getString("id"));
+        }catch (Exception ex){
+            Log.e("ERRO", ex.getMessage());
+        }
         return (int)id;
 
     }
@@ -48,6 +59,13 @@ public class ComandaDAO extends DBContext {
         String where = "id = ?";
         String whereArgs[] = new String[]{Integer.toString(comanda.getId()) };
         long id = this.db.update("comanda", preparaContent(comanda), where, whereArgs);
+        try{
+            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/comandas/salvar", comanda.toJson().toString()).get();
+            JSONObject resposta = new JSONObject(response);
+            System.out.println(resposta.getString("id"));
+        }catch (Exception ex){
+            Log.e("ERRO", ex.getMessage());
+        }
         return (int)id;
 
     }
