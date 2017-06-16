@@ -42,10 +42,10 @@ public class ComandaProdutoDAO extends DBContext {
         return (int)id;
     }
 
-    public int entregarProduto(int comanda_id, int produto_id) throws ParseException {
+    public int entregarProduto(int comanda_produto_id) throws ParseException {
         this.db = getWritableDatabase();
-        String sql = "SELECT * FROM comanda_produto WHERE comanda_id=? and produto_id=? and data_hora_entrega = null";
-        String where[] = new String[]{Integer.toString(comanda_id),Integer.toString(produto_id) };
+        String sql = "SELECT comanda_produto.produto_id as 'produto_descricao', * FROM comanda_produto WHERE id=? and data_hora_entrega is null";
+        String where[] = new String[]{Integer.toString(comanda_produto_id) };
         Cursor c = this.db.rawQuery(sql, where);
 
         ComandaProduto com = null;
@@ -98,13 +98,15 @@ public class ComandaProdutoDAO extends DBContext {
             throw ex;
         }
     }
-    public List<ComandaProduto> pesquisarPorProduto(int comanda_id, String produto_descricao) throws ParseException {
+    public List<ComandaProduto> pesquisar(int comanda_id, Boolean somentePendentes) throws ParseException {
         //Definir permissão de leitura
         this.db = getReadableDatabase();
 
 //        String sql = "SELECT comanda_produto.*, produto.nome as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE produto.descricao like ?";
         String sql = "SELECT comanda_produto.*, comanda_produto.produto_id as 'produto_descricao' FROM comanda_produto where comanda_id = ?";
-        String where[] = new String[]{/*"%" + produto_descricao.toUpperCase() + "%"*/ Integer.toString(comanda_id).trim() };
+        if (somentePendentes != null && somentePendentes)
+            sql = sql + " and data_hora_entrega is null";
+        String where[] = new String[]{ Integer.toString(comanda_id).trim() };
 
         //Realizar a consulta
         Cursor c = this.db.rawQuery(sql, where);

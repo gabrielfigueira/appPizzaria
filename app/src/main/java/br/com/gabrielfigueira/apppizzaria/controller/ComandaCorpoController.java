@@ -2,39 +2,38 @@ package br.com.gabrielfigueira.apppizzaria.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import br.com.gabrielfigueira.apppizzaria.R;
-import br.com.gabrielfigueira.apppizzaria.adapter.ComandaAdapter;
 import br.com.gabrielfigueira.apppizzaria.adapter.ComandaProdutoAdapter;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaDAO;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaProdutoDAO;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.ComandaProduto;
 
-public class ComandaCorpoController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnClickListener, MenuItem.OnMenuItemClickListener {
+public class ComandaCorpoController extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnClickListener {
     private EditText edtMesa;
     private EditText edtCliente_nome;
     private Button btnEditar;
     private FloatingActionButton btnCadastrar;
+    private CheckBox chkSomentePendentes;
     private MenuItem mnuDeletar;
     private MenuItem mnuEntrega;
 
@@ -64,15 +63,11 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         lstComandaProduto.setOnItemClickListener(this);
         lstComandaProduto.setOnItemLongClickListener(this);
 
-//        mnuDeletar = (MenuItem)findViewById(R.id.mnuDeletar);
-//        mnuDeletar.setOnMenuItemClickListener(this);
-//        mnuEntrega = (MenuItem)findViewById(R.id.mnuEntrega);
-//        mnuEntrega.setOnMenuItemClickListener(this);
+        chkSomentePendentes = (CheckBox)findViewById(R.id.chkSomentePendentes);
+        chkSomentePendentes.setOnClickListener(this);
+        chkSomentePendentes.setChecked(false);
 
         setTitle("Comanda");
-
-//        mnuDeletar.setVisible(false);
-//        mnuEntrega.setVisible(false);
 
         Intent it = getIntent();
         if (it != null){
@@ -86,6 +81,18 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         listaComandasSelecionadas = new ArrayList<>();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.comanda_corpo_menu, menu);
+
+        mnuEntrega = menu.findItem(R.id.mnuEntrega);
+        mnuDeletar = menu.findItem(R.id.mnuDeletar);
+
+        mnuEntrega.setVisible(false);
+        mnuDeletar.setVisible(false);
+        return true;
+    }
+
     private void atualizaTela() throws ParseException {
         comanda = new ComandaDAO(this).pesquisarPorId(id);
         if (comanda == null){
@@ -93,12 +100,19 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         }
         edtMesa.setText(comanda.getMesa());
         edtCliente_nome.setText(comanda.getCliente().getNome());
+        listaComandasSelecionadas.clear();
+        lstComandaProduto.setBackgroundColor(Color.TRANSPARENT);
+
+        if (mnuEntrega != null)
+            mnuEntrega.setVisible(false);
+        if (mnuDeletar != null)
+            mnuDeletar.setVisible(false);
 
         preencherListView();
     }
 
     private void preencherListView() throws ParseException {
-        List<ComandaProduto> lista = new ComandaProdutoDAO(this).pesquisarPorProduto(comanda.getId(), "");
+        List<ComandaProduto> lista = new ComandaProdutoDAO(this).pesquisar(comanda.getId(), chkSomentePendentes.isChecked());
         ComandaProdutoAdapter adp = new ComandaProdutoAdapter(this, lista);
         lstComandaProduto.setAdapter(adp);
         adp.notifyDataSetChanged();
@@ -109,6 +123,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         super.onResume();
         try {
             atualizaTela();
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -127,15 +142,24 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
             for(ComandaProduto pro : listaComandasSelecionadas){
                 if (pro.getId() == produto.getId()){
                     listaComandasSelecionadas.remove(pro);
-                    view.setSelected(false);
                     achou = true;
+                    view.setBackgroundColor(Color.TRANSPARENT);
                     break;
                 }
             }
             if (!achou){
-                view.setSelected(true);
                 listaComandasSelecionadas.add(produto);
+                view.setSelected(true);
+                view.setBackgroundColor(Color.LTGRAY);
             }
+
+            mnuEntrega.setVisible(false);
+            mnuDeletar.setVisible(false);
+
+            if (listaComandasSelecionadas.size() >= 1)
+                mnuEntrega.setVisible(true);
+            if (listaComandasSelecionadas.size() == 1)
+                mnuDeletar.setVisible(true);
 
         }
     }
@@ -151,19 +175,40 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
             it.putExtra("id", 0);
             it.putExtra("comanda_id", comanda.getId());
             startActivity(it);
+        }else if (view.getId() == R.id.chkSomentePendentes){
+            onResume();
         }
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         final ComandaProduto produto = (ComandaProduto)parent.getItemAtPosition(position);
-        listaComandasSelecionadas.add(produto);
 
+        boolean achou = false;
+        for(ComandaProduto pro : listaComandasSelecionadas){
+            if (pro.getId() == produto.getId()){
+                listaComandasSelecionadas.remove(pro);
+                achou = true;
+                view.setBackgroundColor(Color.TRANSPARENT);
+                break;
+            }
+        }
+        if (!achou){
+            listaComandasSelecionadas.add(produto);
+            view.setBackgroundColor(Color.LTGRAY);
+        }
+        mnuEntrega.setVisible(false);
+        mnuDeletar.setVisible(false);
+
+        if (listaComandasSelecionadas.size() >= 1)
+            mnuEntrega.setVisible(true);
+        if (listaComandasSelecionadas.size() == 1)
+            mnuDeletar.setVisible(true);
         return true;
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         if (menuItem.getItemId() == R.id.mnuDeletar){
             final ComandaProduto produto = listaComandasSelecionadas.get(0);
@@ -174,11 +219,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     new ComandaProdutoDAO(getApplicationContext()).deletar(produto.getId());
-                    try {
-                        atualizaTela();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    onResume();
                 }
             });
             dlg.setNegativeButton("NÃO", null);
@@ -192,8 +233,9 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
                     ComandaProdutoDAO dao = new ComandaProdutoDAO(getApplicationContext());
                     try {
                         for(ComandaProduto pro : listaComandasSelecionadas){
-                            dao.entregarProduto(pro.getComanda().getId(), pro.getProduto().getId());
+                            dao.entregarProduto(pro.getId());
                         }
+                        onResume();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

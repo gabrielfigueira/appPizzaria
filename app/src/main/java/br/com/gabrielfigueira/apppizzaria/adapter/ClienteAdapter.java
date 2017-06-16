@@ -49,10 +49,6 @@ public class ClienteAdapter extends BaseAdapter {
         TextView tv1 = (TextView)convertView.findViewById(R.id.txtNome);
         tv1.setText(String.format("%s", cliente.getNome()));
 
-
-//
-//        TextView tv3 = (TextView)convertView.findViewById(R.id.txtUrl);
-//        tv2.setText(playlist.getUrl());
         return convertView;
     }
 }

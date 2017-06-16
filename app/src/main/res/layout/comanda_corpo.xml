@@ -45,6 +45,14 @@ tools:menu="res.menu.comanda_corpo_menutyrghn "
         android:layout_width="match_parent"
         android:layout_below="@id/edtCliente_nome"
         android:gravity="right">
+
+        <CheckBox
+            android:id="@+id/chkSomentePendentes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Somente pedentes" />
+
         <Button
             android:id="@+id/btnEditar"
             android:layout_width="100dp"
@@ -57,7 +65,7 @@ tools:menu="res.menu.comanda_corpo_menutyrghn "
         android:layout_width="match_parent"
         android:layout_height="446dp"
         android:layout_below="@id/linBotoes"
-        ></ListView>
+        android:drawSelectorOnTop="false"></ListView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnCadastrar"
