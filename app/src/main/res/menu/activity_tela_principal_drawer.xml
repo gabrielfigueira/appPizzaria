@@ -5,19 +5,15 @@
         <item
             android:id="@+id/nav_comanda"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Comanda" />
+            android:title="Comandas" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_cliente"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Clientes" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_produto"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Produtos" />
     </group>
 
     <item android:title="Communicate">

@@ -24,9 +24,11 @@
         <activity android:name=".controller.ComandaListaController" />
         <activity android:name=".controller.ComandaFormController" />
         <activity android:name=".controller.ComandaCorpoController" />
-        <activity android:name=".controller.ComandaProdutoFormController"></activity>
+        <activity android:name=".controller.ComandaProdutoFormController"/>
         <activity android:name=".controller.ClienteFormController" />
-        <activity android:name=".controller.ClienteListaController"></activity>
+        <activity android:name=".controller.ClienteListaController"/>
+        <activity android:name=".controller.ProdutoListaController" />
+        <activity android:name=".controller.ProdutoFormController"/>
     </application>
 
 </manifest>

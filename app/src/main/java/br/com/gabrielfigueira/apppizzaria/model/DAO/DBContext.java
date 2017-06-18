@@ -46,12 +46,17 @@ public class DBContext extends SQLiteOpenHelper {
                     "id_centralizado integer null"+
                     ");";
 
-    /*PEGAR COM OS DEMAIS MEMBROS DO GRUPO*/
-    private final String sql_produto_create = "create table produto(id integer primary key AUTOINCREMENT, descricao text null);";
+    private final String sql_produto_create =
+            "create table produto(" +
+                "id integer primary key AUTOINCREMENT, " +
+                "descricao text null, " +
+                "id_centralizado integer null, " +
+                "data_sincronizacao text null" +
+            ");";
 
     private SQLiteDatabase db;
     public DBContext(Context context){
-        super(context,"apppizzaria.db",null, 7);
+        super(context,"apppizzaria.db",null, 8);
     }
 
     @Override

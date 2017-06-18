@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="br.com.gabrielfigueira.apppizzaria.controller.ProdutoFormController">
+
+    <TextView
+        android:text="Descrição"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtDescricao" />
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnSalvar"
+            android:text="salvar"
+            android:textColor="#FFFFFF"
+            android:background="@color/colorPrimary"
+            android:textSize="14sp"
+            android:layout_marginRight="15dp"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:text="cancelar"
+            android:textColor="#FFFFFF"
+            android:background="@color/colorPrimary"
+            android:textSize="14sp"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import br.com.gabrielfigueira.apppizzaria.controller.ClienteListaController;
 import br.com.gabrielfigueira.apppizzaria.controller.ComandaFormController;
 import br.com.gabrielfigueira.apppizzaria.controller.ComandaListaController;
+import br.com.gabrielfigueira.apppizzaria.controller.ProdutoListaController;
 
 public class tela_principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,16 +90,13 @@ public class tela_principal extends AppCompatActivity
         if (id == R.id.nav_comanda) {
             Intent it = new Intent(this, ComandaListaController.class);
             startActivity(it);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_cliente) {
             Intent it = new Intent(this, ClienteListaController.class);
             startActivity(it);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_produto) {
+            Intent it = new Intent(this, ProdutoListaController.class);
+            startActivity(it);
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 

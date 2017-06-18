@@ -44,7 +44,7 @@ public class ComandaProdutoDAO extends DBContext {
 
     public int entregarProduto(int comanda_produto_id) throws ParseException {
         this.db = getWritableDatabase();
-        String sql = "SELECT comanda_produto.produto_id as 'produto_descricao', * FROM comanda_produto WHERE id=? and data_hora_entrega is null";
+        String sql = "SELECT comanda_produto.*, produto.descricao as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE comanda_produto.id=? and data_hora_entrega is null";
         String where[] = new String[]{Integer.toString(comanda_produto_id) };
         Cursor c = this.db.rawQuery(sql, where);
 
@@ -102,8 +102,7 @@ public class ComandaProdutoDAO extends DBContext {
         //Definir permissão de leitura
         this.db = getReadableDatabase();
 
-//        String sql = "SELECT comanda_produto.*, produto.nome as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE produto.descricao like ?";
-        String sql = "SELECT comanda_produto.*, comanda_produto.produto_id as 'produto_descricao' FROM comanda_produto where comanda_id = ?";
+        String sql = "SELECT comanda_produto.*, produto.descricao as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id where comanda_produto.comanda_id = ?";
         if (somentePendentes != null && somentePendentes)
             sql = sql + " and data_hora_entrega is null";
         String where[] = new String[]{ Integer.toString(comanda_id).trim() };
