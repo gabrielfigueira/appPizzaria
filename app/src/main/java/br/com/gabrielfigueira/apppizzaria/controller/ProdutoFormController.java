@@ -64,49 +64,21 @@ public class ProdutoFormController extends AppCompatActivity implements View.OnC
         } else if (v.getId() == R.id.btnSalvar) {
             AlertDialog.Builder dlg = new AlertDialog.Builder(this);
             try {
-                String acao = "";
                 produto.setDescricao(edtDescricao.getText().toString());
 
                 ProdutoDAO produtoDAO = new ProdutoDAO(this);
                 if (id == 0) {
                     id = produtoDAO.inserir(produto);
-                    acao = "Inserir";
                 } else {
                     id = produtoDAO.atualizar(produto);
-                    acao = "Alterar";
                 }
                 if (produto.getId() == 0)
                     produto.setId(id);
 
-                //Consumo WEBSERVICE
-                try {
-                    if (SOHelper.possuiRedeDisponivel(this)) {
-                        if (acao.equals("Inserir"))
-                            produto.setData_sincronizacao(new Date());
-
-                        String strResposta = new WebService(this).execute(acao, "https://pizzariaapi.herokuapp.com/api/produtos/salvar", produto.toJson().toString()).get();
-                        JSONObject resposta = new JSONObject(strResposta);
-
-                        //Caso de algum erro, zere a data de sincronização porque não foi inserido no BD do webservice, abrindo para futura sincronização.
-                        if (!resposta.isNull("response") && resposta.getInt("response") < 0) {
-                            if (acao.equals("Inserir"))
-                                produto.setData_sincronizacao(null);
-
-                            throw new Exception("Erro ao executar serviço!");
-                        }
-                        //Caso tiver sido inserido, devemos atualizar o id centralizado e a data de sincronização, este já foi preenchido anterior.
-                        if (acao.equals("Inserir")) {
-                            if (!resposta.isNull("response") && resposta.getInt("response") > 0)
-                                produto.setId_centralizado(resposta.getInt("response"));
-                            produtoDAO.atualizar(produto);
-                        }
-                    }
-                }catch (Exception ex){
-                    dlg.setTitle("Pizzaria App");
-                    dlg.setMessage(ex.getMessage());
-                    dlg.setCancelable(false);
-                    dlg.setPositiveButton("OK", null);
-                    dlg.show();
+                Intent it = getIntent();
+                if (it != null){
+                    it.putExtra("id", produto.getId());
+                    setResult(RESULT_OK, it);
                 }
 
                 dlg.setTitle("Pizzaria App");
@@ -127,5 +99,14 @@ public class ProdutoFormController extends AppCompatActivity implements View.OnC
                 dlg.show();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent it = getIntent();
+        if (it != null){
+            setResult(RESULT_CANCELED, it);
+        }
+        super.onBackPressed();
     }
 }

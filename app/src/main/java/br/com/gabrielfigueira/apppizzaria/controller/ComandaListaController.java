@@ -70,9 +70,9 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Comanda comanda = (Comanda)parent.getItemAtPosition(position);
-        Intent it = new Intent(context,ComandaCorpoController.class);
+        Intent it = new Intent(getApplicationContext(),ComandaCorpoController.class);
         it.putExtra("id", comanda.getId());
-        startActivity(it);
+        startActivityForResult(it, ModoDominio.alterar.getValor());
     }
 
     @Override
@@ -119,7 +119,7 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
         if (v.getId() == R.id.btnCadastrar){
             try {
                 Intent it = new Intent(
-                        this,
+                        context,
                         ComandaFormController.class
                 );
                 //Abrir a Atividade

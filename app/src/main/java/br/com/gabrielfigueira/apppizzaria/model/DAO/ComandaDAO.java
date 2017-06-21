@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
+import br.com.gabrielfigueira.apppizzaria.model.Entidades.ComandaProduto;
 import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
 
 import java.io.BufferedWriter;
@@ -79,8 +80,11 @@ public class ComandaDAO extends DBContext {
 
         if (c.moveToFirst()) {
             Comanda comanda = getComandafromCursor(c);
-            if (addItens != null && addItens)
-                comanda.setListaProdutos(new ComandaProdutoDAO(context).pesquisar(comanda.getId(), false));
+            if (addItens != null && addItens) {
+                List<ComandaProduto> lista = new ComandaProdutoDAO(context).pesquisar(comanda.getId(), false);
+                if (lista != null)
+                    comanda.setListaProdutos(lista);
+            }
             return comanda;
         } else {
             return null;

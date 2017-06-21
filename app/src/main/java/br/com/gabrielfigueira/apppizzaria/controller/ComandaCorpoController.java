@@ -253,4 +253,13 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         }
         return false;
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent it = getIntent();
+        if (it != null){
+            setResult(RESULT_OK, it);
+        }
+        super.onBackPressed();
+    }
 }

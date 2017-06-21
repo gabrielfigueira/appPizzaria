@@ -14,6 +14,7 @@ import android.widget.ListView;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import br.com.gabrielfigueira.apppizzaria.R;
@@ -73,7 +74,7 @@ public class ProdutoListaController extends AppCompatActivity implements Adapter
     public void onClick(View v) {
         if (v.getId() == R.id.btnCadastrar) {
             Intent it = new Intent(this, ProdutoFormController.class);
-            startActivity(it);
+            startActivityForResult(it, ModoDominio.inserir.getValor());
         }
 
     }
@@ -122,5 +123,52 @@ public class ProdutoListaController extends AppCompatActivity implements Adapter
         Intent it = new Intent(getApplicationContext(), ProdutoFormController.class);
         it.putExtra("id", produto.getId());
         startActivity(it);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            int id = data.getIntExtra("id", 0);
+            //Consumo WEBSERVICE
+            try {
+                ProdutoDAO produtoDAO = new ProdutoDAO(this);
+                Produto produto = produtoDAO.pesquisarPorId(id);
+
+                if (SOHelper.possuiRedeDisponivel(this)) {
+                    String acao = "";
+                    if (produto.getId_centralizado() == 0) {
+                        produto.setData_sincronizacao(new Date());
+                        acao = "Inserir";
+                    }else {
+                        acao = "Alterar";
+                    }
+                    String strResposta = new WebService(this).execute(acao, "https://pizzariaapi.herokuapp.com/api/produtos/salvar", produto.toJson().toString()).get();
+                    JSONObject resposta = new JSONObject(strResposta);
+
+                    //Caso de algum erro, zere a data de sincronização porque não foi inserido no BD do webservice, abrindo para futura sincronização.
+                    if (!resposta.isNull("response") && resposta.getInt("response") < 0) {
+                        if (acao.equals("Inserir"))
+                            produto.setData_sincronizacao(null);
+
+                        throw new Exception("Erro ao executar serviço!");
+                    }
+                    //Caso tiver sido inserido, devemos atualizar o id centralizado e a data de sincronização, este já foi preenchido anterior.
+                    if (acao.equals("Inserir")) {
+                        if (!resposta.isNull("response") && resposta.getInt("response") > 0)
+                            produto.setId_centralizado(resposta.getInt("response"));
+                        produtoDAO.atualizar(produto);
+                    }
+                }
+            } catch (Exception ex) {
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage(ex.getMessage());
+                dlg.setCancelable(false);
+                dlg.setPositiveButton("OK", null);
+                dlg.show();
+            }
+        }
     }
 }
