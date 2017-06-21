@@ -14,6 +14,8 @@ import android.widget.Spinner;
 
 import android.text.format.Time;
 
+import org.json.JSONObject;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +26,8 @@ import br.com.gabrielfigueira.apppizzaria.model.DAO.ClienteDAO;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ComandaDAO;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Cliente;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Comanda;
+import br.com.gabrielfigueira.apppizzaria.util.SOHelper;
+import br.com.gabrielfigueira.apppizzaria.util.WebService;
 
 public class ComandaFormController extends AppCompatActivity implements View.OnClickListener {
     private EditText edtMesa;
@@ -52,7 +56,7 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
         if (it != null){
             try{
                 id = it.getIntExtra("id",0);
-                comanda = new ComandaDAO(this).pesquisarPorId(id);
+                comanda = new ComandaDAO(this).pesquisarPorId(id, false);
                 if (comanda == null){
                     comanda = new Comanda();
                 }
@@ -72,8 +76,13 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
                 if (idx >= 0)
                     spnCliente.setSelection(idx);
 
-            }catch(Exception e){
-                Log.e("ERRO", e.getMessage());
+            }catch(Exception ex){
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage(ex.getMessage());
+                dlg.setCancelable(false);
+                dlg.setPositiveButton("OK", null);
+                dlg.show();
             }
         }
     }
@@ -85,39 +94,77 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
             if ( it != null)
                 setResult(RESULT_CANCELED, it);
             super.onBackPressed();
+
         }else if (v.getId() == R.id.btnSalvar){
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
             try {
+                ComandaDAO comandaDAO = new ComandaDAO(this);
                 comanda.setMesa(edtMesa.getText().toString());
                 comanda.setCliente((Cliente)spnCliente.getSelectedItem());
                 comanda.setData_hora_abertura(new Date());
-
+                String acao = "";
                 if ( id == 0){
-                    id = new ComandaDAO(this).inserir(comanda);
+                    id = comandaDAO.inserir(comanda);
                     comanda.setId(id);
+                    acao = "Inserir";
                 }else{
-                    id = new ComandaDAO(this).atualizar(comanda);
+                    id = comandaDAO.atualizar(comanda);
+                    acao = "Alterar";
                 }
+
+                //Consumo WEBSERVICE
+                try {
+                    if (SOHelper.possuiRedeDisponivel(this)) {
+                        if (acao.equals("Inserir"))
+                            comanda.setData_sincronizacao(new Date());
+
+                        String strResposta = new WebService(this).execute(acao, "https://pizzariaapi.herokuapp.com/api/comandas/salvar", comanda.toJson().toString()).get();
+                        JSONObject resposta = new JSONObject(strResposta);
+
+                        //Caso de algum erro, zere a data de sincronização porque não foi inserido no BD do webservice, abrindo para futura sincronização.
+                        if (!resposta.isNull("response") && resposta.getInt("response") < 0) {
+                            if (acao.equals("Inserir"))
+                                comanda.setData_sincronizacao(null);
+
+                            throw new Exception("Erro ao executar serviço!");
+                        }
+                        //Caso tiver sido inserido, devemos atualizar o id centralizado e a data de sincronização, este já foi preenchido anterior.
+                        if (acao.equals("Inserir")) {
+                            if (!resposta.isNull("response") && resposta.getInt("response") > 0)
+                                comanda.setId_centralizado(resposta.getInt("response"));
+                            comandaDAO.atualizar(comanda);
+                        }
+                    }
+                }catch (Exception ex){
+                    dlg.setTitle("Pizzaria App");
+                    dlg.setMessage(ex.getMessage());
+                    dlg.setCancelable(false);
+                    dlg.setPositiveButton("OK", null);
+                    dlg.show();
+                }
+
                 if (it != null){
                     it.putExtra("id", comanda.getId());
                     setResult(RESULT_OK, it);
                 }
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-                Log.e("ERRO", e.getMessage());
+
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage("Operação realizada com sucesso!"+ id);
+                dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                dlg.show();
+
+            }catch(Exception ex){
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage(ex.getMessage());
+                dlg.setCancelable(false);
+                dlg.setPositiveButton("OK", null);
+                dlg.show();
             }
-
-            System.out.println(id);
-
-            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setTitle("Pizzaria App");
-            dlg.setMessage("Operação realizada com sucesso!"+ id);
-            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-            dlg.show();
         }
     }
 }

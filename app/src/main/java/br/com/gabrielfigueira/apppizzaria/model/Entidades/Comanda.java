@@ -2,10 +2,16 @@ package br.com.gabrielfigueira.apppizzaria.model.Entidades;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
 
 /**
  * Created by Fabricio on 04/06/2017.
@@ -20,8 +26,10 @@ public class Comanda {
     private int id_centralizado;
     private Date data_sincronizacao;
     private Cliente cliente;
+    private List<ComandaProduto> listaProdutos;
     public Comanda(){
         cliente = new Cliente();
+        listaProdutos = new ArrayList<>();
     }
 
     public int getId() {
@@ -88,13 +96,31 @@ public class Comanda {
         this.cliente = cliente;
     }
 
-    public JSONObject toJson(){
+    public List<ComandaProduto> getListaProdutos() {
+        return listaProdutos;
+    }
+
+    public void setListaProdutos(List<ComandaProduto> listaProdutos) {
+        this.listaProdutos = listaProdutos;
+    }
+
+    public JSONObject toJson() throws Exception {
         JSONObject obj = new JSONObject();
-        try {
-            obj.put("mesa", mesa);
-        } catch(Exception ex) {
-            Log.e("ERRO:", ex.getMessage());
+        if (id_centralizado != 0)
+            obj.put("id", id_centralizado);
+        obj.put("mesa", mesa);
+        obj.put("data_hora_abertura", DataHelper.dateToStr(data_hora_abertura));
+        obj.put("data_hora_finalizacao", DataHelper.dateToStr(data_hora_finalizacao));
+        obj.put("data_sincronizacao", DataHelper.dateToStr(data_sincronizacao));
+        obj.put("desconto", desconto);
+        obj.put("cliente_id", (cliente != null && cliente.getId_centralizado() != 0) ? cliente.getId_centralizado(): null);
+
+        JSONArray listaJSON = new JSONArray();
+        for ( ComandaProduto produto :listaProdutos) {
+            listaJSON.put(produto.toJson());
         }
+        obj.put("produtos", listaJSON);
+
         return obj;
     }
 }

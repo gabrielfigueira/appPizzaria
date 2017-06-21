@@ -1,6 +1,11 @@
 package br.com.gabrielfigueira.apppizzaria.model.Entidades;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
+
+import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
 
 /**
  * Created by figueira on 06/06/17.
@@ -56,5 +61,13 @@ public class ComandaProduto {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
+    }
+
+    public JSONObject toJson() throws Exception {
+        JSONObject obj = new JSONObject();
+        obj.put("produto_id", produto != null && produto.getId_centralizado() != 0?produto.getId_centralizado(): null);
+        obj.put("quantidade", quantidade);
+        obj.put("data_hora_entrega", DataHelper.dateToStr(data_hora_entrega));
+        return obj;
     }
 }

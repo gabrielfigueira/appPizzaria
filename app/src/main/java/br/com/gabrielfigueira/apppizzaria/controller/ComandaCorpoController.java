@@ -93,8 +93,8 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         return true;
     }
 
-    private void atualizaTela() throws ParseException {
-        comanda = new ComandaDAO(this).pesquisarPorId(id);
+    private void atualizaTela() throws Exception {
+        comanda = new ComandaDAO(this).pesquisarPorId(id, false);
         if (comanda == null){
             comanda = new Comanda();
         }
@@ -124,8 +124,13 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         try {
             atualizaTela();
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setTitle("Pizzaria App");
+            dlg.setMessage(ex.getMessage());
+            dlg.setCancelable(false);
+            dlg.setPositiveButton("OK", null);
+            dlg.show();
         }
     }
 
@@ -213,7 +218,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
         if (menuItem.getItemId() == R.id.mnuDeletar){
             final ComandaProduto produto = listaComandasSelecionadas.get(0);
 
-            dlg.setTitle("Produto");
+            dlg.setTitle("Pizzaria App");
             dlg.setMessage("Tem certeza que deseja deletar o produto da comanda " + (produto.getProduto() != null? produto.getProduto().getDescricao(): "") + "?");
             dlg.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                 @Override
@@ -225,7 +230,7 @@ public class ComandaCorpoController extends AppCompatActivity implements Adapter
             dlg.setNegativeButton("NÃO", null);
             dlg.show();
         }else {
-            dlg.setTitle("Produto");
+            dlg.setTitle("Pizzaria App");
             dlg.setMessage("Tem certeza que deseja entregar produtos selecionados?");
             dlg.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                 @Override

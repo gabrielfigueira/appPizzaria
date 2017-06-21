@@ -10,9 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONObject;
+
+import java.util.Date;
+
 import br.com.gabrielfigueira.apppizzaria.R;
 import br.com.gabrielfigueira.apppizzaria.model.DAO.ProdutoDAO;
 import br.com.gabrielfigueira.apppizzaria.model.Entidades.Produto;
+import br.com.gabrielfigueira.apppizzaria.util.SOHelper;
+import br.com.gabrielfigueira.apppizzaria.util.WebService;
 
 public class ProdutoFormController extends AppCompatActivity implements View.OnClickListener {
     private EditText edtDescricao;
@@ -56,31 +62,70 @@ public class ProdutoFormController extends AppCompatActivity implements View.OnC
         if (v.getId() == R.id.btnCancelar) {
             super.onBackPressed();
         } else if (v.getId() == R.id.btnSalvar) {
-            try {
-                produto.setDescricao(edtDescricao.getText().toString());
-                if (id == 0) {
-                    id = new ProdutoDAO(this).inserir(produto);
-                } else {
-                    id = new ProdutoDAO(this).atualizar(produto);
-                }
-
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                Log.e("ERRO", e.getMessage());
-            }
-            System.out.println(id);
-
             AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setTitle("Pizzaria App");
-            dlg.setMessage("Operação realizada com sucesso!" + id);
-            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
+            try {
+                String acao = "";
+                produto.setDescricao(edtDescricao.getText().toString());
+
+                ProdutoDAO produtoDAO = new ProdutoDAO(this);
+                if (id == 0) {
+                    id = produtoDAO.inserir(produto);
+                    acao = "Inserir";
+                } else {
+                    id = produtoDAO.atualizar(produto);
+                    acao = "Alterar";
                 }
-            });
-            dlg.show();
+                if (produto.getId() == 0)
+                    produto.setId(id);
+
+                //Consumo WEBSERVICE
+                try {
+                    if (SOHelper.possuiRedeDisponivel(this)) {
+                        if (acao.equals("Inserir"))
+                            produto.setData_sincronizacao(new Date());
+
+                        String strResposta = new WebService(this).execute(acao, "https://pizzariaapi.herokuapp.com/api/produtos/salvar", produto.toJson().toString()).get();
+                        JSONObject resposta = new JSONObject(strResposta);
+
+                        //Caso de algum erro, zere a data de sincronização porque não foi inserido no BD do webservice, abrindo para futura sincronização.
+                        if (!resposta.isNull("response") && resposta.getInt("response") < 0) {
+                            if (acao.equals("Inserir"))
+                                produto.setData_sincronizacao(null);
+
+                            throw new Exception("Erro ao executar serviço!");
+                        }
+                        //Caso tiver sido inserido, devemos atualizar o id centralizado e a data de sincronização, este já foi preenchido anterior.
+                        if (acao.equals("Inserir")) {
+                            if (!resposta.isNull("response") && resposta.getInt("response") > 0)
+                                produto.setId_centralizado(resposta.getInt("response"));
+                            produtoDAO.atualizar(produto);
+                        }
+                    }
+                }catch (Exception ex){
+                    dlg.setTitle("Pizzaria App");
+                    dlg.setMessage(ex.getMessage());
+                    dlg.setCancelable(false);
+                    dlg.setPositiveButton("OK", null);
+                    dlg.show();
+                }
+
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage("Operação realizada com sucesso!");
+                dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                dlg.show();
+
+            } catch (Exception ex) {
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage(ex.getMessage());
+                dlg.setCancelable(false);
+                dlg.setPositiveButton("OK", null);
+                dlg.show();
+            }
         }
     }
 }
