@@ -147,10 +147,10 @@ public class ClienteListaController extends AppCompatActivity implements Adapter
             int id = data.getIntExtra("id", 0);
             //Consumo WEBSERVICE
             try {
-                ClienteDAO clienteDAO = new ClienteDAO(context);
-                Cliente cliente = clienteDAO.pesquisarPorId(id);
-
                 if (SOHelper.possuiRedeDisponivel(context)) {
+                    ClienteDAO clienteDAO = new ClienteDAO(context);
+                    Cliente cliente = clienteDAO.pesquisarPorId(id);
+
                     String acao = "";
                     if (cliente.getId_centralizado() == 0) {
                         cliente.setData_sincronizacao(new Date());

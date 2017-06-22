@@ -133,10 +133,10 @@ public class ProdutoListaController extends AppCompatActivity implements Adapter
             int id = data.getIntExtra("id", 0);
             //Consumo WEBSERVICE
             try {
-                ProdutoDAO produtoDAO = new ProdutoDAO(this);
-                Produto produto = produtoDAO.pesquisarPorId(id);
-
                 if (SOHelper.possuiRedeDisponivel(this)) {
+                    ProdutoDAO produtoDAO = new ProdutoDAO(this);
+                    Produto produto = produtoDAO.pesquisarPorId(id);
+
                     String acao = "";
                     if (produto.getId_centralizado() == 0) {
                         produto.setData_sincronizacao(new Date());
