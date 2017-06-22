@@ -77,7 +77,7 @@ public class ClienteListaController extends AppCompatActivity implements Adapter
         final Cliente cliente = (Cliente)parent.getItemAtPosition(position);
         Intent it = new Intent(getApplicationContext(),ClienteFormController.class);
         it.putExtra("id", cliente.getId());
-        startActivity(it);
+        startActivityForResult(it, ModoDominio.alterar.getValor());
     }
 
     @Override

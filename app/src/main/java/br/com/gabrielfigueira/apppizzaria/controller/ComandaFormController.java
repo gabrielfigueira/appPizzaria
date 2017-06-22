@@ -90,8 +90,7 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnCancelar){
-
-            super.onBackPressed();
+            onBackPressed();
 
         }else if (v.getId() == R.id.btnSalvar){
             AlertDialog.Builder dlg = new AlertDialog.Builder(this);

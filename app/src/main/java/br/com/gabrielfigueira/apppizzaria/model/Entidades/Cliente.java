@@ -2,9 +2,12 @@ package br.com.gabrielfigueira.apppizzaria.model.Entidades;
 
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+
+import br.com.gabrielfigueira.apppizzaria.util.DataHelper;
 
 /**
  * Created by Gabriel on 04/06/2017.
@@ -137,20 +140,20 @@ public class Cliente {
         this.numero = numero;
     }
 
-    public JSONObject toJson(){
+    public JSONObject toJson() throws Exception {
         JSONObject obj = new JSONObject();
-        try{
-            obj.put("nome", nome);
-            obj.put("cpf", cpf);
-            obj.put("bairro", bairro);
-            obj.put("cep", cep);
-            obj.put("cidade", cidade);
-            obj.put("telefone", telefone);
-            obj.put("email", email);
-            obj.put("data_sincronizacao", data_sincronizacao);
-        } catch (Exception ex){
-            Log.e("LOG:", ex.getMessage());
-        }
+        if (id_centralizado != 0)
+            obj.put("id", id_centralizado);
+        obj.put("nome", nome);
+        obj.put("cpf", cpf);
+        obj.put("logradouro",logradouro);
+        obj.put("numero", numero);
+        obj.put("bairro", bairro);
+        obj.put("cep", cep);
+        obj.put("cidade", cidade);
+        obj.put("telefone", telefone);
+        obj.put("email", email);
+        obj.put("data_sincronizacao", DataHelper.dateToStr(data_sincronizacao));
         return obj;
     }
 }
