@@ -75,8 +75,13 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
 //                edtTelefone.setText(cliente.getTelefone());
 //                edtEmail.setText(cliente.getEmail());
 
-            } catch (Exception e) {
-                Log.e("ERRO", e.getMessage());
+            } catch (Exception ex) {
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage(ex.getMessage());
+                dlg.setCancelable(false);
+                dlg.setPositiveButton("OK", null);
+                dlg.show();
             }
         }
     }
@@ -87,11 +92,12 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
         if (v.getId() == R.id.btnCancelar){
             super.onBackPressed();
         }else if (v.getId() == R.id.btnSalvar){
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
             try {
                 cliente.setNome(edtNome.getText().toString());
                 cliente.setCpf(edtCpf.getText().toString());
                 cliente.setLogradouro(edtLogradouro.getText().toString());
-                edtNumero.setText(Integer.toString(cliente.getNumero()));
+                cliente.setNumero(Integer.parseInt(edtNumero.getText().toString()));
                 cliente.setBairro(edtBairro.getText().toString());
                 cliente.setCep(edtCep.getText().toString());
 //                cliente.setCidade(edtCidade.getText().toString());
@@ -104,23 +110,37 @@ public class ClienteFormController extends AppCompatActivity implements View.OnC
                     id = new ClienteDAO(this).atualizar(cliente);
                 }
 
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-                Log.e("ERRO", e.getMessage());
+                Intent it = getIntent();
+                if (it != null)
+                    setResult(RESULT_OK, it);
+
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage("Operação realizada com sucesso!");
+                dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                dlg.show();
+
+            }catch(Exception ex){
+                dlg.setTitle("Pizzaria App");
+                dlg.setMessage(ex.getMessage());
+                dlg.setCancelable(false);
+                dlg.setPositiveButton("OK", null);
+                dlg.show();
             }
 
-            System.out.println(id);
 
-            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setTitle("Pizzaria App");
-            dlg.setMessage("Operação realizada com sucesso!"+ id);
-            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-            dlg.show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent it = getIntent();
+        if (it != null)
+            setResult(RESULT_CANCELED, it);
+        super.onBackPressed();
     }
 }

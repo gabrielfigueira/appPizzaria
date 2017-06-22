@@ -36,13 +36,6 @@ public class ClienteDAO extends DBContext{
         this.db = getWritableDatabase();
 
         long id = this.db.insert("cliente", null, preparaContent(cliente));
-        try {
-            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/clientes/salvar", cliente.toJson().toString()).get();
-            JSONObject resposta = new JSONObject(response);
-            System.out.println(resposta.getString("id"));
-        } catch (Exception ex){
-            Log.e("ERRO", ex.getMessage());
-        }
         return (int)id;
     }
 
@@ -52,13 +45,6 @@ public class ClienteDAO extends DBContext{
         String whereArgs[] = new String[]{Integer.toString(cliente.getId()) };
         long id = this.db.update("cliente", preparaContent(cliente), where, whereArgs);
 
-        try{
-            response = new WebService(context).execute("Inserir","https://pizzariaapi.herokuapp.com/api/clientes/salvar", cliente.toJson().toString()).get();
-            JSONObject resposta = new JSONObject(response);
-            System.out.println(resposta.getString("id"));
-        }catch (Exception ex){
-            Log.e("ERRO", ex.getMessage());
-        }
         return (int)id;
 
     }
@@ -93,13 +79,12 @@ public class ClienteDAO extends DBContext{
         }
     }
 
-    public List<Cliente> pesquisarPorCliente(String produto_descricao) throws ParseException {
+    public List<Cliente> pesquisarPorNome(String nome) throws Exception {
         //Definir permissão de leitura
         this.db = getReadableDatabase();
 
-//        String sql = "SELECT comanda_produto.*, produto.nome as 'produto_descricao' FROM comanda_produto left join produto on comanda_produto.produto_id = produto.id WHERE produto.descricao like ?";
         String sql = "SELECT * FROM cliente";
-        String where[] = new String[]{"%" + produto_descricao.toUpperCase() + "%"};
+        String where[] = new String[]{"%" + nome.toUpperCase() + "%"};
 
         //Realizar a consulta
         Cursor c = this.db.rawQuery(sql, null);
@@ -115,18 +100,18 @@ public class ClienteDAO extends DBContext{
         }
     }
 
-    public List<Cliente> pesquisarPorNome(String nome){
-        List<Cliente> lista = new ArrayList<>();
-        Cliente c = new Cliente();
-        c.setId(1);
-        c.setNome("Fabricio");
-        lista.add(c);
-        c = new Cliente();
-        c.setId(2);
-        c.setNome("Gabriel");
-        lista.add(c);
-        return lista;
-    }
+//    public List<Cliente> pesquisarPorNome(String nome){
+//        List<Cliente> lista = new ArrayList<>();
+//        Cliente c = new Cliente();
+//        c.setId(1);
+//        c.setNome("Fabricio");
+//        lista.add(c);
+//        c = new Cliente();
+//        c.setId(2);
+//        c.setNome("Gabriel");
+//        lista.add(c);
+//        return lista;
+//    }
 
     private Cliente getClientefromCursor(Cursor cursor) throws ParseException {
         Cliente cliente = new Cliente();

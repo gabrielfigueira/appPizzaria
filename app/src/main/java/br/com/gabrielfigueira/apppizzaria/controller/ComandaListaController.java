@@ -91,12 +91,13 @@ public class ComandaListaController extends AppCompatActivity implements Adapter
 
                 //Consumo WEBSERVICE
                 try {
-                    String strResposta = new WebService(context).execute("Excluir","https://pizzariaapi.herokuapp.com/api/comandas/excluir", comanda.toJson().toString()).get();
-                    JSONObject resposta = new JSONObject(strResposta);
+                    if (SOHelper.possuiRedeDisponivel(context)) {
+                        String strResposta = new WebService(context).execute("Excluir", "https://pizzariaapi.herokuapp.com/api/comandas/excluir", comanda.toJson().toString()).get();
+                        JSONObject resposta = new JSONObject(strResposta);
 
-                    if (!resposta.isNull("response") && resposta.getInt("response") < 0)
-                        throw new Exception("Erro ao executar serviço!");
-
+                        if (!resposta.isNull("response") && resposta.getInt("response") < 0)
+                            throw new Exception("Erro ao executar serviço!");
+                    }
                 }catch (Exception ex){
                     AlertDialog.Builder dlg = new AlertDialog.Builder(context);
                     dlg.setTitle("Pizzaria App");

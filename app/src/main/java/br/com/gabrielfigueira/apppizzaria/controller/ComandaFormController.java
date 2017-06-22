@@ -61,7 +61,7 @@ public class ComandaFormController extends AppCompatActivity implements View.OnC
                     comanda = new Comanda();
                 }
                 edtMesa.setText(comanda.getMesa());
-                List<Cliente> lista = new ClienteDAO(this).pesquisarPorCliente("");
+                List<Cliente> lista = new ClienteDAO(this).pesquisarPorNome("");
                 int idx = -1;
                 for(Cliente cliente: lista){
                     if (cliente.getId() == comanda.getCliente().getId()){
